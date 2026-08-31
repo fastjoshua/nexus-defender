@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nexus Defender, videojuego web de defensa de redes.">
+  <title>Nexus Defender</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="brand" aria-label="Título del juego">
+      <p class="eyebrow">PROTOCOLO DE DEFENSA || BEECKER</p>
+      <h1>NEXUS DEFENDER</h1>
+      <p class="subtitle">AI Network Defender</p>
+    </header>
+
+    <section class="game-panel" aria-label="Videojuego Nexus Defender">
+      <div class="hud" id="hud" aria-live="polite">
+        <div><span>OPERADOR</span><strong id="hudPlayer">---</strong></div>
+        <div><span>VIDAS</span><strong id="hudLives">❤ ❤ ❤</strong></div>
+        <div><span>PUNTOS</span><strong id="hudScore">000000</strong></div>
+        <div><span>NIVEL</span><strong id="hudLevel">01</strong></div>
+        <div><span>DASH</span><strong id="hudDash">LISTO</strong></div>
+        <div><span>RÉCORD</span><strong id="hudHighScore">000000</strong></div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="960" height="540" tabindex="0" aria-label="Área de juego"></canvas>
+
+        <section class="screen active" id="startScreen">
+          <div class="screen-card">
+            <span class="status-pill">SISTEMA EN ESPERA</span>
+            <h2>Defiende el nexo</h2>
+            <p class="mission-story"><strong>YACERAMI ha corrompido el Nexo.</strong> Rompe las defensas de sus tres guardianes estelares, mejora tu nave y derrota al final boss antes de que la red desaparezca completamente.</p>
+
+            <form id="startForm">
+              <label for="playerName">Nombre del operador</label>
+              <input id="playerName" name="playerName" type="text" maxlength="16" placeholder="Ej: fastjoshua (opcional)" autocomplete="nickname">
+
+              <fieldset class="skin-selector">
+                <legend>Elige tu skin</legend>
+                <div class="skin-options">
+                  <label class="skin-option selected">
+                    <input type="radio" name="skin" value="cyan" checked>
+                    <span class="skin-preview cyan">▲</span>
+                    <small>Nexo</small>
+                  </label>
+                  <label class="skin-option">
+                    <input type="radio" name="skin" value="violet">
+                    <span class="skin-preview violet">◆</span>
+                    <small>Quantum</small>
+                  </label>
+                  <label class="skin-option">
+                    <input type="radio" name="skin" value="gold">
+                    <span class="skin-preview gold">⬟</span>
+                    <small>Becker</small>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="mode-selector">
+                <legend>Dificultad</legend>
+                <label><input type="radio" name="difficulty" value="normal" checked><span>Normal</span><small>Experiencia original</small></label>
+                <label id="hardModeOption"><input type="radio" name="difficulty" value="hard" disabled><span>Difícil 🔒</span><small id="hardModeHint">Derrota a YACERAMI para desbloquearlo</small></label>
+                <label id="bossRushOption"><input type="radio" name="difficulty" value="bossrush" disabled><span>Boss Rush 🔒</span><small id="bossRushHint">Supera el modo difícil</small></label>
+              </fieldset>
+
+              <fieldset class="aim-selector">
+                <legend>Puntería</legend>
+                <label><input type="radio" name="aimMode" value="auto" checked><span>Automática</span></label>
+                <label><input type="radio" name="aimMode" value="manual"><span>Manual · mouse/joystick</span></label>
+              </fieldset>
+
+              <fieldset class="audio-controls">
+                <legend>Audio</legend>
+                <label for="musicVolume"><span>♫ Música</span><output id="musicVolumeValue">35%</output></label>
+                <input id="musicVolume" type="range" min="0" max="100" value="35">
+                <label for="effectsVolume"><span>⚡ Efectos</span><output id="effectsVolumeValue">70%</output></label>
+                <input id="effectsVolume" type="range" min="0" max="100" value="70">
+              </fieldset>
+              <button class="music-button" id="musicButton" type="button" aria-pressed="true">♫ MÚSICA: ON</button>
+              <button class="primary-button" type="submit">INICIAR MISIÓN</button>
+              <button class="secondary-button" id="bestiaryButton" type="button">CONSULTAR BESTIARIO</button>
+              <button class="secondary-button" id="storeButton" type="button">TIENDA COSMÉTICA · <span id="storeFragments">0</span> ✦</button>
+            </form>
+
+            <div class="instructions">
+              <h3>Controles</h3>
+              <p><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o flechas para moverte</p>
+              <p>El arma apunta y dispara automáticamente</p>
+              <p>En modo manual, mueve el mouse sobre la arena o usa el segundo joystick</p>
+              <p><kbd>SHIFT</kbd> o <kbd>ESPACIO</kbd> para usar dash</p>
+              <p><kbd>Q</kbd> para activar el ataque definitivo</p>
+              <p><kbd>P</kbd> para pausar la misión</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" id="bestiaryScreen">
+          <div class="screen-card bestiary-card">
+            <span class="status-pill">ARCHIVO DE AMENAZAS</span>
+            <h2>Bestiario</h2>
+            <p>Identifica cada amenaza antes de entrar al Nexo.</p>
+            <div class="bestiary-grid">
+              <article><span class="enemy-icon virus">✹</span><div><strong>Virus</strong><small>Enemigo básico de trayectoria directa.</small></div></article>
+              <article><span class="enemy-icon bot">☠</span><div><strong>Bot</strong><small>Amenaza rotatoria de resistencia intermedia.</small></div></article>
+              <article><span class="enemy-icon spam">✉</span><div><strong>Spam</strong><small>Pequeño, veloz y difícil de anticipar.</small></div></article>
+              <article><span class="enemy-icon sniper">⌖</span><div><strong>Sniper</strong><small>Apunta y dispara proyectiles hacia tu posición.</small></div></article>
+              <article><span class="enemy-icon hunter">◉</span><div><strong>Hunter</strong><small>Corrige su trayectoria para perseguirte.</small></div></article>
+              <article><span class="enemy-icon glitch">⌁</span><div><strong>Glitch</strong><small>Se desplaza con movimientos laterales erráticos.</small></div></article>
+              <article><span class="enemy-icon tank">⬢</span><div><strong>Tank</strong><small>Grande, lento y capaz de resistir siete impactos.</small></div></article>
+              <article><span class="enemy-icon orbiter">◌</span><div><strong>Orbiter</strong><small>Curva su trayectoria alrededor del jugador.</small></div></article>
+              <article><span class="enemy-icon mine">✺</span><div><strong>Mina Pulsar</strong><small>Se frena en la arena y dispara en todas direcciones.</small></div></article>
+              <article><span class="enemy-icon phantom">◈</span><div><strong>Phantom</strong><small>Parpadea y cambia bruscamente de dirección.</small></div></article>
+              <article><span class="enemy-icon comet">★</span><div><strong>Estrella fugaz</strong><small>Cruza el mapa a gran velocidad; una guía luminosa avisa su trayectoria.</small></div></article>
+            </div>
+            <h3 class="compendium-heading">Módulos y mejoras</h3>
+            <div class="bestiary-grid upgrade-bestiary-grid">
+              <article><span class="upgrade-compendium-icon">⚡</span><div><strong>Overclock</strong><small>Aumenta 22% la velocidad de disparo.</small></div></article>
+              <article><span class="upgrade-compendium-icon">✦</span><div><strong>Pulso ofensivo</strong><small>Aumenta el daño de cada proyectil.</small></div></article>
+              <article><span class="upgrade-compendium-icon">➤</span><div><strong>Propulsores</strong><small>Aumenta 15% la velocidad de movimiento.</small></div></article>
+              <article><span class="upgrade-compendium-icon">♥</span><div><strong>Núcleo reforzado</strong><small>Añade una vida máxima y repara una vida.</small></div></article>
+              <article><span class="upgrade-compendium-icon">◇</span><div><strong>Dash cuántico</strong><small>Reduce un segundo la recarga del dash.</small></div></article>
+              <article><span class="upgrade-compendium-icon">⬡</span><div><strong>Escudo Becker</strong><small>Concede diez segundos de protección.</small></div></article>
+            </div>
+            <h3 class="compendium-heading">Sinergias</h3>
+            <div class="synergy-compendium">
+              <span>Nova Estelar</span><small>Overclock + Pulso ofensivo</small>
+              <span>Impacto Hipersónico</span><small>Propulsores + Dash cuántico</small>
+              <span>Égida</span><small>Núcleo reforzado + Escudo Becker</small>
+              <span>Reactor Quantum</span><small>Overclock + Escudo Becker</small>
+            </div>
+            <button class="primary-button" id="closeBestiaryButton" type="button">VOLVER A LA MISIÓN</button>
+          </div>
+        </section>
+
+        <section class="screen" id="gameOverScreen">
+          <div class="screen-card">
+            <span class="status-pill danger">CONEXIÓN PERDIDA</span>
+            <h2 class="game-over-title">GAME OVER</h2>
+            <p id="gameOverMessage">YACERAMI te ha vencido.</p>
+            <div class="results">
+              <div><span>Puntuación</span><strong id="finalScore">0</strong></div>
+              <div><span>Nivel</span><strong id="finalLevel">1</strong></div>
+              <div><span>Récord</span><strong id="finalHighScore">0</strong></div>
+            </div>
+            <div class="run-stats" id="gameOverStats"></div>
+            <button class="primary-button" id="restartButton" type="button">VOLVER AL MENÚ</button>
+          </div>
+        </section>
+
+        <section class="screen" id="upgradeScreen">
+          <div class="screen-card upgrade-card">
+            <span class="status-pill">GUARDIÁN ELIMINADO</span>
+            <h2>Elige una mejora</h2>
+            <p>Selecciona un módulo para prepararte contra YACERAMI.</p>
+            <div class="upgrade-options" id="upgradeOptions"></div>
+            <p class="synergy-hint">Sinergias: Overclock + Pulso · Propulsores + Dash · Núcleo + Escudo · Overclock + Escudo</p>
+            <button class="secondary-button shop-between-button" id="upgradeStoreButton" type="button">VISITAR TIENDA COSMÉTICA</button>
+          </div>
+        </section>
+
+        <section class="screen" id="victoryScreen">
+          <div class="screen-card victory-card">
+            <span class="status-pill">NEXO RESTAURADO</span>
+            <h2>YACERAMI derrotado</h2>
+            <p id="victoryMessage">La corrupción ha sido eliminada.</p>
+            <div class="results">
+              <div><span>Puntuación</span><strong id="victoryScore">0</strong></div>
+              <div><span>Tiempo</span><strong id="victoryTime">0s</strong></div>
+              <div><span>Récord</span><strong id="victoryHighScore">0</strong></div>
+            </div>
+            <div class="run-stats" id="victoryStats"></div>
+            <button class="primary-button" id="victoryRestartButton" type="button">VOLVER AL MENÚ</button>
+          </div>
+        </section>
+
+        <section class="screen" id="storeScreen">
+          <div class="screen-card store-card">
+            <span class="status-pill">ARSENAL ESTÉTICO</span>
+            <h2>Tienda del Nexo</h2>
+            <p>Convierte los puntos de tus misiones en fragmentos y desbloquea estelas. Ningún artículo modifica el combate.</p>
+            <p class="fragment-balance"><strong id="storeBalance">0</strong> ✦ FRAGMENTOS</p>
+            <div class="cosmetic-grid" id="cosmeticGrid"></div>
+            <button class="primary-button" id="closeStoreButton" type="button">VOLVER</button>
+          </div>
+        </section>
+
+        <div class="pause-message" id="pauseMessage">MISIÓN EN PAUSA</div>
+        <div class="boss-incoming" id="bossIncoming" role="status" aria-live="assertive">
+          <span>⚠ ALERTA DEL NEXO</span>
+          <small>BOSS EN CAMINO</small>
+          <strong id="incomingBossName">GUARDIÁN DESCONOCIDO</strong>
+        </div>
+        <div class="power-status" id="powerStatus" aria-live="polite"></div>
+        <div class="dash-indicator ready" id="dashIndicator" aria-live="polite">
+          <span>⚡</span><strong>DASH LISTO</strong>
+        </div>
+        <div class="ultimate-indicator" id="ultimateIndicator" aria-live="polite">
+          <div><span>✦ ULTIMATE</span><strong id="ultimateValue">0%</strong></div>
+          <div class="ultimate-track"><div id="ultimateBar"></div></div>
+        </div>
+        <div class="level-progress" id="levelProgress">
+          <div class="level-progress-copy">
+            <span id="levelProgressText">NIVEL 1 · 0 / 20 s</span>
+            <strong id="nextBossText">JEFE EN NIVEL 3</strong>
+          </div>
+          <div class="progress-track"><div id="levelProgressBar"></div></div>
+        </div>
+        <div class="boss-bar" id="bossBar">
+          <div><span id="bossName">⚠ GUARDIÁN DEL NEXO</span><strong id="bossTime">100%</strong></div>
+          <div class="progress-track danger-track"><div id="bossProgress"></div></div>
+        </div>
+      </div>
+
+      <div class="mobile-controls" aria-label="Controles táctiles">
+        <button type="button" data-key="ArrowLeft" aria-label="Mover a la izquierda">◀</button>
+        <div>
+          <button type="button" data-key="ArrowUp" aria-label="Mover arriba">▲</button>
+          <button type="button" data-key="ArrowDown" aria-label="Mover abajo">▼</button>
+        </div>
+        <button type="button" data-key="ArrowRight" aria-label="Mover a la derecha">▶</button>
+        <button class="dash-button" id="mobileDash" type="button" aria-label="Usar dash">DASH</button>
+        <button class="ultimate-button" id="mobileUltimate" type="button" aria-label="Usar ataque definitivo">ULT</button>
+        <div class="aim-stick" id="aimStick" aria-label="Segundo joystick de puntería">
+          <span id="aimKnob">●</span><small>APUNTAR</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="records-panel" aria-labelledby="recordsTitle">
+      <div>
+        <p class="eyebrow">ARCHIVO DEL NEXO</p>
+        <h2 id="recordsTitle">Tabla de récords</h2>
+        <p class="final-defeats">YACERAMI DERROTADO <strong id="finalBossDefeats">0</strong> VECES</p>
+        <div class="achievements" id="achievementsList" aria-label="Logros"></div>
+      </div>
+      <div class="records-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Operador</th><th>Puntos</th><th>Nivel</th></tr></thead>
+          <tbody id="recordsBody"><tr><td colspan="4">Aún no hay registros</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <p>Proyecto académico · Videojuego desarrollado con HTML, CSS y JavaScript</p>
+    </footer>
+  </main>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
