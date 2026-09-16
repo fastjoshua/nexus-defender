@@ -799,7 +799,9 @@ function updatePlayerAttack(deltaTime) {
   let aimDistance = 360;
 
   if (aimMode === "manual") {
-    if (manualAim.stickActive) {
+    // En teléfono, la última dirección del joystick tiene prioridad incluso al
+    // soltarlo. Así un evento táctil residual del Canvas no desvía los disparos.
+    if (manualAim.stickActive || isTouchPhone() && manualAim.hasDirection) {
       baseAngle = Math.atan2(manualAim.vectorY, manualAim.vectorX);
     } else if (manualAim.hasPointer) {
       baseAngle = Math.atan2(manualAim.y - originY, manualAim.x - originX);
@@ -3254,7 +3256,7 @@ function drawDashEchoes() {
   ctx.restore();
 }
 
-/** Guía móvil muy tenue: indica la dirección real sin competir con los ataques. */
+/** Guía móvil discreta pero legible: indica la dirección real de los disparos. */
 function drawMobileAimGuide() {
   if (!player || !isTouchPhone() || !document.body.classList.contains("mobile-session") ||
       aimMode !== "manual" || !(manualAim.hasDirection || manualAim.stickActive)) return;
@@ -3272,16 +3274,16 @@ function drawMobileAimGuide() {
   const endY = startY + vectorY * range;
 
   ctx.save();
-  ctx.setLineDash([3, 12]);
+  ctx.setLineDash([4, 10]);
   ctx.lineDashOffset = -combatTime * 7;
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "rgba(67, 255, 155, 0.13)";
+  ctx.lineWidth = 1.35;
+  ctx.strokeStyle = "rgba(67, 255, 155, 0.24)";
   ctx.beginPath();
   ctx.moveTo(startX + vectorX * 30, startY + vectorY * 30);
   ctx.lineTo(endX, endY);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.globalAlpha = 0.18;
+  ctx.globalAlpha = 0.3;
   ctx.beginPath();
   ctx.arc(endX, endY, 4, 0, Math.PI * 2);
   ctx.stroke();
@@ -4379,6 +4381,7 @@ function beginStick(event, id, stick, knob) {
   stick.setPointerCapture(event.pointerId);
   const bounds = stick.getBoundingClientRect();
   const face = stick.querySelector(".stick-face");
+  stick.classList.remove("latched");
   const half = face.offsetWidth / 2;
   face.style.left = `${clamp(event.clientX - bounds.left, half, bounds.width - half)}px`;
   face.style.top = `${clamp(event.clientY - bounds.top, half, bounds.height - half)}px`;
@@ -4395,14 +4398,30 @@ function endStick(id, pointerId) {
   const stick = id === "move" ? moveStick : aimStick;
   const knob = id === "move" ? moveKnob : aimKnob;
   stick.classList.remove("active");
-  stick.querySelector(".stick-face").style.left = "50%";
-  stick.querySelector(".stick-face").style.top = "50%";
-  knob.style.transform = "translate(-50%, -50%)";
-  if (id === "move") touchMovement = { x: 0, y: 0, active: false };
-  else manualAim.stickActive = false;
+  if (id === "move") {
+    stick.querySelector(".stick-face").style.left = "50%";
+    stick.querySelector(".stick-face").style.top = "50%";
+    knob.style.transform = "translate(-50%, -50%)";
+    touchMovement = { x: 0, y: 0, active: false };
+  } else {
+    // La puntería queda fijada exactamente donde se soltó: tanto la dirección
+    // usada por los disparos como la posición visual del joystick permanecen.
+    stick.classList.add("latched");
+    manualAim.stickActive = false;
+  }
 }
 
-function releaseAllSticks() { endStick("move"); endStick("aim"); }
+function releaseAllSticks() {
+  endStick("move");
+  endStick("aim");
+  // Los cambios de pantalla sí deben devolver ambos controles a su base.
+  for (const [stick, knob] of [[moveStick, moveKnob], [aimStick, aimKnob]]) {
+    stick.classList.remove("latched");
+    stick.querySelector(".stick-face").style.left = "50%";
+    stick.querySelector(".stick-face").style.top = "50%";
+    knob.style.transform = "translate(-50%, -50%)";
+  }
+}
 
 moveStick.addEventListener("pointerdown", event => {
   if (!beginStick(event, "move", moveStick, moveKnob)) return;

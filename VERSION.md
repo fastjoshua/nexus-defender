@@ -1,4 +1,13 @@
-# Nexus Defender V2.2.2 · Menú móvil igual al de computadora
+# Nexus Defender V2.2.3 · Puntería móvil fijada
+
+**Fecha:** 16 de septiembre de 2026.
+
+- La guía de disparo móvil es un poco más gruesa y visible, manteniendo un estilo discreto.
+- El joystick de apuntado conserva la perilla y la base donde se soltaron.
+- Los disparos continúan en la última dirección fijada hasta que el jugador vuelva a apuntar.
+- Los cambios de pantalla y orientación restablecen los controles para evitar posiciones obsoletas.
+
+## Versión anterior: V2.2.2 · Menú móvil igual al de computadora
 
 **Fecha:** 16 de septiembre de 2026.
 

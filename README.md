@@ -1,4 +1,8 @@
-# Nexus Defender V2.2.2
+# Nexus Defender V2.2.3
+
+## Ajuste V2.2.3 · Puntería móvil fijada
+
+La línea móvil de apuntado aumenta ligeramente su grosor, opacidad y frecuencia de puntos para resultar más fácil de seguir sin cubrir la acción. Al soltar el joystick derecho, la perilla y su base permanecen en la última posición usada; la nave conserva esa dirección para los disparos siguientes. Al tocar nuevamente el control se puede escoger una dirección nueva, mientras que los cambios de pantalla restablecen la posición de forma segura.
 
 ## Ajuste V2.2.2 · Menú móvil coherente con computadora
 

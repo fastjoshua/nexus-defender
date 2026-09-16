@@ -154,11 +154,30 @@ const { chromium } = require('playwright');
       ctx.setLineDash = original;
       return calls;
     });
-    assert(guide.some(pattern => pattern[0] === 3 && pattern[1] === 12));
+    assert(guide.some(pattern => pattern[0] === 4 && pattern[1] === 10));
     await mobile.screenshot({ path: path.join(output, 'v21-aim-guide.png') });
+    const releasedAimVisual = await mobile.evaluate(() => ({
+      faceLeft: aimStick.querySelector('.stick-face').style.left,
+      knobTransform: aimKnob.style.transform
+    }));
     await mobile.mouse.up();
     assert.equal(await mobile.evaluate(() => manualAim.stickActive), false);
-    console.log('PASS Joysticks flotantes y guía punteada tenue siguen la puntería móvil');
+    assert.equal(await mobile.evaluate(() => aimStick.classList.contains('latched')), true);
+    assert.deepEqual(await mobile.evaluate(() => ({
+      faceLeft: aimStick.querySelector('.stick-face').style.left,
+      knobTransform: aimKnob.style.transform
+    })), releasedAimVisual);
+    const latchedShot = await mobile.evaluate(() => {
+      manualAim.hasPointer = true;
+      manualAim.x = GAME_WIDTH;
+      manualAim.y = player.y;
+      player.attackTimer = 0;
+      playerProjectiles = [];
+      updatePlayerAttack(.1);
+      return { vectorX: manualAim.vectorX, projectileX: playerProjectiles[0]?.velocityX };
+    });
+    assert(latchedShot.vectorX < 0 && latchedShot.projectileX < 0, JSON.stringify(latchedShot));
+    console.log('PASS La guía es visible y el joystick conserva la dirección al soltarlo');
 
     const cdp = await mobile.context().newCDPSession(mobile);
     const moveTouch = await mobile.locator('#moveStick').boundingBox();

@@ -18,7 +18,7 @@ test('PWA abre instalada en pantalla completa horizontal', () => {
 test('la misión solicita pantalla completa sin mostrar instalación en el menú', () => {
   const html = read('index.html');
   const game = read('js/game.js');
-  assert.match(html, /rel="manifest" href="manifest\.webmanifest\?v=2\.2\.2"/);
+  assert.match(html, /rel="manifest" href="manifest\.webmanifest\?v=2\.2\.3"/);
   assert.doesNotMatch(html, /id="installAppButton"/);
   assert.doesNotMatch(game, /beforeinstallprompt/);
   assert.match(game, /requestFullscreen/);
@@ -27,8 +27,8 @@ test('la misión solicita pantalla completa sin mostrar instalación en el menú
 
 test('el Service Worker conserva el juego y elimina cachés anteriores', () => {
   const worker = read('service-worker.js');
-  assert.match(worker, /nexus-defender-v2\.2\.2/);
-  assert.match(worker, /\.\/js\/game\.js\?v=2\.2\.2/);
+  assert.match(worker, /nexus-defender-v2\.2\.3/);
+  assert.match(worker, /\.\/js\/game\.js\?v=2\.2\.3/);
   assert.match(worker, /caches\.delete/);
   assert.match(worker, /event\.request\.mode === "navigate"/);
 });
