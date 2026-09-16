@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nexus Defender, videojuego web de defensa de redes.">
-  <title>Nexus Defender</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="description" content="Nexus Defender V2.0, videojuego web de defensa de redes.">
+  <title>Nexus Defender V2.0</title>
+  <link rel="stylesheet" href="css/styles.css?v=2.0">
 </head>
 <body>
   <main class="game-shell">
     <header class="brand" aria-label="Título del juego">
       <p class="eyebrow">PROTOCOLO DE DEFENSA || BEECKER</p>
       <h1>NEXUS DEFENDER</h1>
-      <p class="subtitle">AI Network Defender</p>
+      <p class="subtitle">AI Network Defender <span class="version-badge">V2.0</span></p>
     </header>
 
     <section class="game-panel" aria-label="Videojuego Nexus Defender">
@@ -26,110 +26,131 @@
       </div>
 
       <div class="canvas-wrap">
-        <canvas id="gameCanvas" width="960" height="540" tabindex="0" aria-label="Área de juego"></canvas>
+        <canvas id="gameCanvas" width="1200" height="750" tabindex="0" aria-label="Área de juego ampliada"></canvas>
 
         <section class="screen active" id="startScreen">
-          <div class="screen-card">
-            <span class="status-pill">SISTEMA EN ESPERA</span>
-            <h2>Defiende el nexo</h2>
-            <p class="mission-story"><strong>YACERAMI ha corrompido el Nexo.</strong> Rompe las defensas de sus tres guardianes estelares, mejora tu nave y derrota al final boss antes de que la red desaparezca completamente.</p>
+          <div class="menu-layout">
+            <div class="menu-hero">
+              <div class="menu-hero-top"><span class="status-pill">SISTEMA EN ESPERA</span><span class="menu-sector">SECTOR 01 / NEXO</span></div>
+              <p class="menu-kicker">MISIÓN PRINCIPAL</p>
+              <h2>El futuro de la red<br><em>está en tus manos.</em></h2>
+              <p class="mission-story"><strong>YACERAMI ha corrompido el Nexo.</strong> Elige una nave, supera a sus guardianes y recupera el control de la red.</p>
+              <div class="menu-hero-visual">
+                <canvas id="menuHeroCanvas" width="520" height="290" role="img" aria-label="Vista de la nave seleccionada defendiendo el Nexo"></canvas>
+                <span class="menu-visual-label">NAVE SELECCIONADA <strong id="menuHeroShipName">CORE</strong></span>
+                <div class="menu-equipped" id="menuEquipped" aria-label="Cosméticos equipados"></div>
+              </div>
+              <div class="menu-mission-facts"><div><strong>03</strong><span>NAVES</span></div><div><strong>04</strong><span>GUARDIANES</span></div><div><strong>15</strong><span>OLEADAS</span></div></div>
+              <nav class="menu-links" aria-label="Explorar Nexus Defender">
+                <button class="secondary-button" id="bestiaryButton" type="button">BESTIARIO <span>↗</span></button>
+                <a class="secondary-button gallery-link" href="designs.html">DISEÑOS <span>↗</span></a>
+                <button class="secondary-button" id="storeButton" type="button">TIENDA <span id="storeFragments">0</span> ✦</button>
+              </nav>
+            </div>
 
-            <form id="startForm">
-              <label for="playerName">Nombre del operador</label>
-              <input id="playerName" name="playerName" type="text" maxlength="16" placeholder="Ej: fastjoshua (opcional)" autocomplete="nickname">
+            <div class="menu-control-panel">
+              <div class="menu-panel-heading"><span>CONFIGURACIÓN DE MISIÓN</span><h3>Prepara tu nave</h3><p>Escoge tu estilo de combate y entra al Nexo.</p></div>
+              <form id="startForm">
+              <div class="menu-fields">
+              <div class="menu-name-field"><label for="playerName">Nombre del operador</label><input id="playerName" name="playerName" type="text" maxlength="16" placeholder="Tu nombre (opcional)" autocomplete="nickname"></div>
 
               <fieldset class="skin-selector">
-                <legend>Elige tu skin</legend>
+                <legend>01 · Elige tu nave <span class="ship-balance"><strong id="shipBalance">0</strong> ✦ MONEDAS ESTELARES</span></legend>
                 <div class="skin-options">
-                  <label class="skin-option selected">
+                  <div class="ship-card" data-skin="cyan"><label class="skin-option selected">
                     <input type="radio" name="skin" value="cyan" checked>
-                    <span class="skin-preview cyan">▲</span>
-                    <small>Nexo</small>
-                  </label>
-                  <label class="skin-option">
+                    <canvas class="skin-preview cyan" width="96" height="96" role="img" aria-label="Nave Core, interceptor de disparo rápido"></canvas>
+                    <small>Core</small>
+                    <span class="skin-role">Ráfaga veloz</span>
+                  </label><span class="ship-state">GRATIS</span></div>
+                  <div class="ship-card" data-skin="violet"><label class="skin-option">
                     <input type="radio" name="skin" value="violet">
-                    <span class="skin-preview violet">◆</span>
-                    <small>Quantum</small>
-                  </label>
-                  <label class="skin-option">
+                    <canvas class="skin-preview violet" width="96" height="96" role="img" aria-label="Nave Serenity, emisores de disparo doble"></canvas>
+                    <small>Serenity</small>
+                    <span class="skin-role">Disparo doble</span>
+                  </label><button class="ship-unlock" data-skin="violet" type="button">COMPRAR · 50 ✦</button><span class="ship-state" hidden>DESBLOQUEADA</span></div>
+                  <div class="ship-card" data-skin="gold"><label class="skin-option">
                     <input type="radio" name="skin" value="gold">
-                    <span class="skin-preview gold">⬟</span>
-                    <small>Becker</small>
-                  </label>
+                    <canvas class="skin-preview gold" width="96" height="96" role="img" aria-label="Nave Firefly, armadura y disparo pesado"></canvas>
+                    <small>Firefly</small>
+                    <span class="skin-role">Impacto pesado</span>
+                  </label><button class="ship-unlock" data-skin="gold" type="button">COMPRAR · 50 ✦</button><span class="ship-state" hidden>DESBLOQUEADA</span></div>
                 </div>
+                <p class="ship-purchase-message" id="shipPurchaseMessage" aria-live="polite"></p>
+                <p class="skin-description" id="skinDescription" aria-live="polite"></p>
               </fieldset>
 
               <fieldset class="mode-selector">
-                <legend>Dificultad</legend>
+                <legend>02 · Dificultad</legend>
                 <label><input type="radio" name="difficulty" value="normal" checked><span>Normal</span><small>Experiencia original</small></label>
-                <label id="hardModeOption"><input type="radio" name="difficulty" value="hard" disabled><span>Difícil 🔒</span><small id="hardModeHint">Derrota a YACERAMI para desbloquearlo</small></label>
-                <label id="bossRushOption"><input type="radio" name="difficulty" value="bossrush" disabled><span>Boss Rush 🔒</span><small id="bossRushHint">Supera el modo difícil</small></label>
+                <label id="hardModeOption"><input type="radio" name="difficulty" value="hard" disabled><span>Difícil 🔒</span><small id="hardModeHint">Derrota a YACERAMI en modo normal</small></label>
+                <label id="bossRushOption"><input type="radio" name="difficulty" value="bossrush" disabled><span>Boss Rush 🔒</span><small id="bossRushHint">Derrota a YACERAMI en modo difícil</small></label>
               </fieldset>
 
-              <fieldset class="aim-selector">
-                <legend>Puntería</legend>
-                <label><input type="radio" name="aimMode" value="auto" checked><span>Automática</span></label>
-                <label><input type="radio" name="aimMode" value="manual"><span>Manual · mouse/joystick</span></label>
-              </fieldset>
-
-              <fieldset class="audio-controls">
-                <legend>Audio</legend>
-                <label for="musicVolume"><span>♫ Música</span><output id="musicVolumeValue">35%</output></label>
-                <input id="musicVolume" type="range" min="0" max="100" value="35">
-                <label for="effectsVolume"><span>⚡ Efectos</span><output id="effectsVolumeValue">70%</output></label>
-                <input id="effectsVolume" type="range" min="0" max="100" value="70">
-              </fieldset>
-              <button class="music-button" id="musicButton" type="button" aria-pressed="true">♫ MÚSICA: ON</button>
-              <button class="primary-button" type="submit">INICIAR MISIÓN</button>
-              <button class="secondary-button" id="bestiaryButton" type="button">CONSULTAR BESTIARIO</button>
-              <button class="secondary-button" id="storeButton" type="button">TIENDA COSMÉTICA · <span id="storeFragments">0</span> ✦</button>
-            </form>
-
-            <div class="instructions">
-              <h3>Controles</h3>
-              <p><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o flechas para moverte</p>
-              <p>El arma apunta y dispara automáticamente</p>
-              <p>En modo manual, mueve el mouse sobre la arena o usa el segundo joystick</p>
-              <p><kbd>SHIFT</kbd> o <kbd>ESPACIO</kbd> para usar dash</p>
-              <p><kbd>Q</kbd> para activar el ataque definitivo</p>
-              <p><kbd>P</kbd> para pausar la misión</p>
+              <details class="menu-advanced">
+                <summary>Ajustes adicionales <span>⌄</span></summary>
+                <div class="menu-advanced-content">
+                  <fieldset class="aim-selector">
+                    <legend>Puntería</legend>
+                    <label><input type="radio" name="aimMode" value="auto" checked><span>Automática</span></label>
+                    <label><input type="radio" name="aimMode" value="manual"><span>Manual · mouse/joystick</span></label>
+                  </fieldset>
+                  <fieldset class="keyboard-settings">
+                    <legend>Teclas de computadora</legend>
+                    <p>Selecciona una acción y pulsa la tecla que quieras usar.</p>
+                    <div class="key-binding-grid" id="keyBindingGrid"></div>
+                    <p class="key-binding-message" id="keyBindingMessage" role="status" aria-live="polite"></p>
+                    <button class="secondary-button reset-bindings" id="resetKeyBindings" type="button">RESTABLECER TECLAS</button>
+                  </fieldset>
+                  <div class="touch-settings"><strong>Controles de teléfono</strong><small>Mueve joysticks y botones a la posición que te resulte cómoda.</small><button class="secondary-button" id="editTouchMenu" type="button">PERSONALIZAR CONTROLES</button></div>
+                  <label class="damage-option"><input id="damageNumbersToggle" type="checkbox"> Mostrar números de daño</label>
+                  <fieldset class="audio-controls">
+                    <legend>Audio</legend>
+                    <label for="musicVolume"><span>♫ Música</span><output id="musicVolumeValue">35%</output></label>
+                    <input id="musicVolume" type="range" min="0" max="100" value="35">
+                    <label for="effectsVolume"><span>⚡ Efectos</span><output id="effectsVolumeValue">70%</output></label>
+                    <input id="effectsVolume" type="range" min="0" max="100" value="70">
+                  </fieldset>
+                  <button class="music-button" id="musicButton" type="button" aria-pressed="true">♫ MÚSICA: ON</button>
+                </div>
+              </details>
+              </div>
+              <div class="menu-actions"><button class="primary-button" type="submit">INICIAR MISIÓN <span>→</span></button><small id="keyHint">WASD / FLECHAS · DASH: SHIFT · ULTIMATE: Q</small></div>
+              </form>
             </div>
           </div>
         </section>
 
         <section class="screen" id="bestiaryScreen">
           <div class="screen-card bestiary-card">
-            <span class="status-pill">ARCHIVO DE AMENAZAS</span>
+            <div class="bestiary-topbar">
+              <span class="status-pill">ARCHIVO DE AMENAZAS</span>
+              <button id="closeBestiaryTop" type="button" aria-label="Cerrar bestiario">VOLVER ×</button>
+            </div>
             <h2>Bestiario</h2>
             <p>Identifica cada amenaza antes de entrar al Nexo.</p>
-            <div class="bestiary-grid">
-              <article><span class="enemy-icon virus">✹</span><div><strong>Virus</strong><small>Enemigo básico de trayectoria directa.</small></div></article>
-              <article><span class="enemy-icon bot">☠</span><div><strong>Bot</strong><small>Amenaza rotatoria de resistencia intermedia.</small></div></article>
-              <article><span class="enemy-icon spam">✉</span><div><strong>Spam</strong><small>Pequeño, veloz y difícil de anticipar.</small></div></article>
-              <article><span class="enemy-icon sniper">⌖</span><div><strong>Sniper</strong><small>Apunta y dispara proyectiles hacia tu posición.</small></div></article>
-              <article><span class="enemy-icon hunter">◉</span><div><strong>Hunter</strong><small>Corrige su trayectoria para perseguirte.</small></div></article>
-              <article><span class="enemy-icon glitch">⌁</span><div><strong>Glitch</strong><small>Se desplaza con movimientos laterales erráticos.</small></div></article>
-              <article><span class="enemy-icon tank">⬢</span><div><strong>Tank</strong><small>Grande, lento y capaz de resistir siete impactos.</small></div></article>
-              <article><span class="enemy-icon orbiter">◌</span><div><strong>Orbiter</strong><small>Curva su trayectoria alrededor del jugador.</small></div></article>
-              <article><span class="enemy-icon mine">✺</span><div><strong>Mina Pulsar</strong><small>Se frena en la arena y dispara en todas direcciones.</small></div></article>
-              <article><span class="enemy-icon phantom">◈</span><div><strong>Phantom</strong><small>Parpadea y cambia bruscamente de dirección.</small></div></article>
-              <article><span class="enemy-icon comet">★</span><div><strong>Estrella fugaz</strong><small>Cruza el mapa a gran velocidad; una guía luminosa avisa su trayectoria.</small></div></article>
-            </div>
+            <p class="bestiary-note">Vida base en modo normal. Los proyectiles de cada nave hacen diferente daño.</p>
+            <div class="bestiary-grid" id="regularBestiary"></div>
+            <h3 class="compendium-heading">Guardianes del vacío</h3>
+            <div class="bestiary-grid" id="bossBestiary"></div>
+            <h3 class="compendium-heading">Peligro estelar</h3>
+            <div class="bestiary-grid" id="hazardBestiary"></div>
+            <a class="secondary-button gallery-link" href="designs.html">EXPLORAR LA GALERÍA ANIMADA ↗</a>
             <h3 class="compendium-heading">Módulos y mejoras</h3>
-            <div class="bestiary-grid upgrade-bestiary-grid">
+            <div class="bestiary-grid upgrade-bestiary-grid" id="moduleCompendium">
               <article><span class="upgrade-compendium-icon">⚡</span><div><strong>Overclock</strong><small>Aumenta 22% la velocidad de disparo.</small></div></article>
               <article><span class="upgrade-compendium-icon">✦</span><div><strong>Pulso ofensivo</strong><small>Aumenta el daño de cada proyectil.</small></div></article>
               <article><span class="upgrade-compendium-icon">➤</span><div><strong>Propulsores</strong><small>Aumenta 15% la velocidad de movimiento.</small></div></article>
               <article><span class="upgrade-compendium-icon">♥</span><div><strong>Núcleo reforzado</strong><small>Añade una vida máxima y repara una vida.</small></div></article>
               <article><span class="upgrade-compendium-icon">◇</span><div><strong>Dash cuántico</strong><small>Reduce un segundo la recarga del dash.</small></div></article>
-              <article><span class="upgrade-compendium-icon">⬡</span><div><strong>Escudo Becker</strong><small>Concede diez segundos de protección.</small></div></article>
+              <article><span class="upgrade-compendium-icon">⬡</span><div><strong>Escudo Firefly</strong><small>Concede diez segundos de protección.</small></div></article>
             </div>
             <h3 class="compendium-heading">Sinergias</h3>
-            <div class="synergy-compendium">
+            <div class="synergy-compendium" id="synergyCompendium">
               <span>Nova Estelar</span><small>Overclock + Pulso ofensivo</small>
               <span>Impacto Hipersónico</span><small>Propulsores + Dash cuántico</small>
-              <span>Égida</span><small>Núcleo reforzado + Escudo Becker</small>
-              <span>Reactor Quantum</span><small>Overclock + Escudo Becker</small>
+              <span>Égida</span><small>Núcleo reforzado + Escudo Firefly</small>
+              <span>Reactor Serenity</span><small>Overclock + Escudo Firefly</small>
             </div>
             <button class="primary-button" id="closeBestiaryButton" type="button">VOLVER A LA MISIÓN</button>
           </div>
@@ -154,9 +175,9 @@
           <div class="screen-card upgrade-card">
             <span class="status-pill">GUARDIÁN ELIMINADO</span>
             <h2>Elige una mejora</h2>
-            <p>Selecciona un módulo para prepararte contra YACERAMI.</p>
+            <p>Escoge entre ataque, defensa y movilidad o energía. Combinar módulos activa sinergias.</p>
             <div class="upgrade-options" id="upgradeOptions"></div>
-            <p class="synergy-hint">Sinergias: Overclock + Pulso · Propulsores + Dash · Núcleo + Escudo · Overclock + Escudo</p>
+            <p class="synergy-hint" id="upgradeSynergyHint">Las cartas muestran qué combinación puedes completar.</p>
             <button class="secondary-button shop-between-button" id="upgradeStoreButton" type="button">VISITAR TIENDA COSMÉTICA</button>
           </div>
         </section>
@@ -178,10 +199,17 @@
 
         <section class="screen" id="storeScreen">
           <div class="screen-card store-card">
+            <button class="store-close-top" id="closeStoreTopButton" type="button" aria-label="Cerrar tienda">✕ CERRAR</button>
             <span class="status-pill">ARSENAL ESTÉTICO</span>
             <h2>Tienda del Nexo</h2>
-            <p>Convierte los puntos de tus misiones en fragmentos y desbloquea estelas. Ningún artículo modifica el combate.</p>
-            <p class="fragment-balance"><strong id="storeBalance">0</strong> ✦ FRAGMENTOS</p>
+            <p>Usa las monedas estelares de tus misiones para personalizar estelas, auras y dash. Todos los efectos son visuales.</p>
+            <p class="fragment-balance"><strong id="storeBalance">0</strong> ✦ MONEDAS ESTELARES</p>
+            <div class="cosmetic-filters" id="cosmeticFilters" role="group" aria-label="Filtrar cosméticos">
+              <button type="button" data-filter="all">TODOS</button>
+              <button type="button" data-filter="trail">ESTELAS</button>
+              <button type="button" data-filter="aura">AURAS</button>
+              <button type="button" data-filter="dash">DASH</button>
+            </div>
             <div class="cosmetic-grid" id="cosmeticGrid"></div>
             <button class="primary-button" id="closeStoreButton" type="button">VOLVER</button>
           </div>
@@ -194,6 +222,9 @@
           <strong id="incomingBossName">GUARDIÁN DESCONOCIDO</strong>
         </div>
         <div class="power-status" id="powerStatus" aria-live="polite"></div>
+        <div class="module-toast" id="moduleToast" role="status" aria-live="polite"></div>
+        <div class="module-rack" id="moduleRack" aria-label="Módulos activos"></div>
+        <div class="hit-feedback" id="hitFeedback" role="status" aria-live="assertive">¡IMPACTO! · VIDA PERDIDA</div>
         <div class="dash-indicator ready" id="dashIndicator" aria-live="polite">
           <span>⚡</span><strong>DASH LISTO</strong>
         </div>
@@ -214,18 +245,19 @@
         </div>
       </div>
 
-      <div class="mobile-controls" aria-label="Controles táctiles">
-        <button type="button" data-key="ArrowLeft" aria-label="Mover a la izquierda">◀</button>
-        <div>
-          <button type="button" data-key="ArrowUp" aria-label="Mover arriba">▲</button>
-          <button type="button" data-key="ArrowDown" aria-label="Mover abajo">▼</button>
+      <div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles">
+        <button class="edit-touch-shortcut" id="editTouchGame" type="button" aria-label="Cambiar posición de controles">⚙ CONTROLES</button>
+        <div class="touch-stick movement-stick" id="moveStick" data-control="move" role="application" aria-label="Joystick de movimiento">
+          <span class="stick-face"><span class="stick-knob" id="moveKnob"></span></span><small>MOVER</small>
         </div>
-        <button type="button" data-key="ArrowRight" aria-label="Mover a la derecha">▶</button>
-        <button class="dash-button" id="mobileDash" type="button" aria-label="Usar dash">DASH</button>
-        <button class="ultimate-button" id="mobileUltimate" type="button" aria-label="Usar ataque definitivo">ULT</button>
-        <div class="aim-stick" id="aimStick" aria-label="Segundo joystick de puntería">
-          <span id="aimKnob">●</span><small>APUNTAR</small>
+        <button class="dash-button" id="mobileDash" data-control="dash" type="button" aria-label="Usar dash">DASH</button>
+        <button class="ultimate-button" id="mobileUltimate" data-control="ultimate" type="button" aria-label="Usar ataque definitivo">ULT</button>
+        <div class="touch-stick aim-stick" id="aimStick" data-control="aim" role="application" aria-label="Joystick de puntería manual">
+          <span class="stick-face"><span class="stick-knob" id="aimKnob"></span></span><small>APUNTAR</small>
         </div>
+      </div>
+      <div class="touch-editor" id="touchEditor" role="dialog" aria-modal="true" aria-labelledby="touchEditorTitle" hidden>
+        <div class="touch-editor-panel"><span class="eyebrow">CONTROLES A TU MEDIDA</span><h2 id="touchEditorTitle">Coloca tus controles</h2><p>Arrastra los dos joysticks, Dash y Ultimate. Se guarda una distribución para teléfono vertical y otra para horizontal.</p><div class="touch-editor-actions"><button id="saveTouchLayout" type="button">GUARDAR</button><button id="resetTouchLayout" type="button">RESTABLECER</button><button id="cancelTouchLayout" type="button">CANCELAR</button></div><p id="touchEditorMessage" role="status" aria-live="polite"></p></div>
       </div>
     </section>
 
@@ -249,6 +281,13 @@
     </footer>
   </main>
 
-  <script src="js/game.js"></script>
+  <script src="js/enemy-art.js"></script>
+  <script src="js/enemy-behavior.js?v=1.6"></script>
+  <script src="js/enemy-previews.js"></script>
+  <script src="js/player-art.js?v=1.5"></script>
+  <script src="js/cosmetic-art.js?v=1.8"></script>
+  <script src="js/audio-system.js?v=1.6"></script>
+  <script src="js/game-rules.js?v=1.5"></script>
+  <script src="js/game.js?v=2.0"></script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explora los enemigos animados de Nexus Defender y aprende a reconocer sus ataques.">
+  <title>Galería de amenazas · Nexus Defender</title>
+  <link rel="stylesheet" href="css/designs.css">
+</head>
+<body>
+  <main class="archive">
+    <nav class="archive-nav"><a class="brand-link" href="index.html">NEXUS <span>DEFENDER</span></a><a class="play-link" href="index.html">JUGAR ↗</a></nav>
+    <header class="archive-header">
+      <p class="eyebrow">ARCHIVO DEL NEXO / 16 AMENAZAS</p>
+      <h1>Conoce a tu enemigo.</h1>
+      <p>Diez amenazas digitales. Cinco guardianes. Un peligro estelar.<br>Reconoce sus siluetas y anticipa su próximo movimiento.</p>
+    </header>
+    <div class="gallery-controls" role="group" aria-label="Opciones de la galería">
+      <button id="animationToggle" type="button" aria-pressed="false">Pausar animación</button>
+      <button id="sizeToggle" type="button" aria-pressed="false">Tamaño de combate</button>
+      <button id="damageToggle" type="button" aria-pressed="false">Mostrar daño del Tank</button>
+      <button id="phaseToggle" type="button" aria-pressed="false">YACERAMI · Fase 2</button>
+    </div>
+    <section aria-labelledby="regularHeading">
+      <div class="section-heading"><h2 id="regularHeading"><span>01</span> Amenazas digitales</h2><p>Desde el nivel 1</p></div>
+      <div class="design-grid" id="regularDesigns"></div>
+    </section>
+    <section aria-labelledby="bossHeading">
+      <div class="section-heading"><h2 id="bossHeading"><span>02</span> Guardianes del vacío</h2><p>Un encuentro cada tres niveles</p></div>
+      <div class="design-grid boss-designs" id="bossDesigns"></div>
+    </section>
+    <section aria-labelledby="hazardHeading">
+      <div class="section-heading"><h2 id="hazardHeading"><span>03</span> Peligro estelar</h2><p>Observa la guía. Evita su trayectoria.</p></div>
+      <div class="design-grid hazard-designs" id="hazardDesigns"></div>
+    </section>
+    <footer>Las señales luminosas anuncian los ataques. Las monedas estelares compran cosméticos y naves; las estelas son decorativas.<a href="index.html">Volver al juego →</a></footer>
+  </main>
+  <script src="js/enemy-art.js"></script>
+  <script src="js/enemy-previews.js"></script>
+  <script src="js/gallery.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+:root { color-scheme: dark; --cyan: #74e6ed; --ink: #070c16; --muted: #8c9caf; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ink); color: #eff4f8; font-family: "Segoe UI", Arial, sans-serif; }
+body::before { content: ""; position: fixed; z-index: -1; inset: 0; background: radial-gradient(ellipse at 40% 0, #0b243348, transparent 65%); pointer-events: none; }
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
+.archive { max-width: 1580px; margin: auto; padding: 0 44px; }
+.archive-nav { min-height: 90px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid #263544; }
+.brand-link { font-size: 17px; letter-spacing: .17em; font-weight: 800; }.brand-link span { color: var(--cyan); }
+.play-link { color: var(--cyan); font: 700 12px Consolas, monospace; letter-spacing: .15em; padding: 12px 19px; border: 1px solid #385b66; border-radius: 4px; }
+.archive-header { padding: 49px 0 32px; }
+.eyebrow { color: var(--cyan); font: 12px Consolas, monospace; letter-spacing: .16em; }
+h1 { font-size: clamp(34px, 4.4vw, 61px); line-height: 1.1; letter-spacing: -.035em; margin: 18px 0; font-weight: 650; }
+.archive-header > p:last-child { color: #b1bfce; line-height: 1.75; font-size: 16px; }
+.gallery-controls { display: flex; flex-wrap: wrap; gap: 9px; padding-bottom: 32px; }
+.gallery-controls button { background: #101b28; border: 1px solid #2b3d4f; color: #bccad8; padding: 10px 14px; border-radius: 5px; font: 12px "Segoe UI", sans-serif; cursor: pointer; }
+.gallery-controls button:hover { border-color: var(--cyan); }.gallery-controls button[aria-pressed="true"] { color: #b3fbff; background: #14313d; border-color: #6bdde6; }
+.section-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 26px 0 20px; }
+.section-heading h2 { font-size: 21px; margin: 0; font-weight: 550; }.section-heading h2 span { margin-right: 15px; color: #668091; font: 13px Consolas, monospace; }
+.section-heading p { margin: 0; font-size: 12px; color: var(--muted); }
+.design-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 15px; }
+.design-card { min-width: 0; overflow: hidden; border: 1px solid #283443; border-radius: 9px; background: #0b121e; }
+.design-portrait { display: block; width: 100%; aspect-ratio: 1; background-image: linear-gradient(#3e708112 1px, transparent 1px), linear-gradient(90deg, #3e708112 1px, transparent 1px), radial-gradient(ellipse at 50% 60%, #1b18352e, transparent 75%); background-size: 24px 24px, 24px 24px, 100% 100%; border-bottom: 1px solid #233140; }
+.enemy-copy { padding: 18px 17px 19px; }
+.enemy-copy h3 { font-size: 15px; line-height: 1.4; font-weight: 750; letter-spacing: .075em; margin: 0 0 5px; color: var(--enemy-color); text-transform: uppercase; }
+.enemy-skin-name { display: block; font-size: 13px; color: #e3e8ee; line-height: 1.5; }
+.enemy-copy p { font-size: 12px; line-height: 1.65; min-height: 80px; color: #9aabbd; margin: 12px 0 18px; }
+.enemy-level { display: inline-block; font: 10px Consolas, monospace; letter-spacing: .15em; color: #9eb0c0; padding: 5px 7px; border: 1px solid #293849; border-radius: 3px; }
+.hazard-designs { grid-template-columns: minmax(0, 1fr); }
+.hazard-designs .design-card { display: grid; grid-template-columns: 240px 1fr; }.hazard-designs .design-portrait { height: 180px; aspect-ratio: auto; border-bottom: 0; border-right: 1px solid #283443; }
+.hazard-designs .enemy-copy p { min-height: 0; }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; margin-top: 50px; padding: 26px 0 36px; color: #71869b; border-top: 1px solid #263544; font-size: 12px; line-height: 1.7; }
+footer a { color: var(--cyan); }
+@media (max-width: 1150px) { .archive { padding: 0 24px; }.design-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }.hazard-designs { grid-template-columns: 1fr; } }
+@media (max-width: 650px) { .archive { padding: 0 16px; }.archive-nav { min-height: 70px; }.brand-link { font-size: 13px; letter-spacing: .1em; }.play-link { padding: 10px; }.archive-header { padding-top: 30px; }.design-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }.enemy-copy { padding: 12px; }.enemy-copy h3 { font-size: 13px; letter-spacing: .03em; }.enemy-copy p { min-height: 108px; font-size: 11px; }.enemy-skin-name { font-size: 12px; }.section-heading h2 { font-size: 18px; }.section-heading p { margin-left: 32px; }.hazard-designs { grid-template-columns: 1fr; }.hazard-designs .design-card { grid-template-columns: 1fr; }.hazard-designs .design-portrait { height: 170px; border-right: 0; border-bottom: 1px solid #283443; } }
