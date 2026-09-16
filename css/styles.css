@@ -1161,6 +1161,17 @@ kbd {
 .mobile-controls.editing [data-control].dragging { outline-color: #ffd166; cursor: grabbing; }
 .mobile-controls.editing .edit-touch-shortcut { display: none; }
 
+.orientation-gate { display: none; }
+.orientation-phone {
+  position: relative; width: 64px; height: 104px; margin: 0 auto 24px;
+  border: 3px solid var(--cyan); border-radius: 12px;
+  box-shadow: inset 0 0 20px rgba(0,240,255,.15), 0 0 24px rgba(0,240,255,.22);
+  animation: phoneRotate 1.8s ease-in-out infinite;
+}
+.orientation-phone::after { content: ''; position: absolute; right: 20px; bottom: 7px; left: 20px; height: 3px; border-radius: 3px; background: var(--cyan); }
+.orientation-phone span { position: absolute; right: -36px; top: 29px; color: #43ff9b; font: 900 2.1rem Consolas, monospace; text-shadow: 0 0 15px #43ff9b; }
+@keyframes phoneRotate { 0%, 25% { transform: rotate(0deg); } 70%, 100% { transform: rotate(90deg); } }
+
 .touch-editor[hidden] { display: none; }
 .touch-editor { position: fixed; inset: 0; z-index: 55; padding: max(22px, env(safe-area-inset-top)) 14px 220px; color: #e8f8ff; text-align: center; background: radial-gradient(circle at 50% 48%, rgba(39, 117, 255, .18), transparent 37%), linear-gradient(#08192e 1px, transparent 1px), linear-gradient(90deg, #08192e 1px, transparent 1px), #030a17; background-size: auto, 38px 38px, 38px 38px, auto; }
 .touch-editor-panel { width: min(480px, 100%); margin: 8vh auto 0; padding: 23px; border: 1px solid rgba(104, 224, 255, .34); border-radius: 16px; background: rgba(5, 15, 31, .92); box-shadow: 0 0 40px rgba(0,240,255,.1); }
@@ -1253,6 +1264,14 @@ footer {
   body.mobile-ended .mobile-controls { display: none; }
   body.mobile-session:has(#upgradeScreen.active, #storeScreen.active, #bestiaryScreen.active) .mobile-controls { display: none; }
   body.control-editing .mobile-controls { display: block; }
+  body.mobile-session.orientation-blocked .mobile-controls { display: none !important; }
+  body.mobile-session.orientation-blocked .orientation-gate {
+    position: fixed; inset: 0; z-index: 80; display: grid; align-content: center;
+    padding: 30px; color: #e8f8ff; text-align: center;
+    background: radial-gradient(circle at 50% 45%, rgba(0,240,255,.12), transparent 32%), #030a17;
+  }
+  .orientation-gate h2 { margin: 8px 0; font-size: clamp(1.8rem, 9vw, 3rem); text-transform: uppercase; letter-spacing: .05em; }
+  .orientation-gate > p:last-child { width: min(420px, 90vw); margin: 6px auto 0; color: #a9bfca; font-size: .8rem; line-height: 1.55; }
 
   .dash-indicator {
     right: 8px;

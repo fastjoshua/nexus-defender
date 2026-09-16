@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nexus Defender V2.0, videojuego web de defensa de redes.">
-  <title>Nexus Defender V2.0</title>
-  <link rel="stylesheet" href="css/styles.css?v=2.0">
+  <meta name="description" content="Nexus Defender V2.1, videojuego web de defensa de redes.">
+  <title>Nexus Defender V2.1</title>
+  <link rel="stylesheet" href="css/styles.css?v=2.1">
 </head>
 <body>
   <main class="game-shell">
     <header class="brand" aria-label="Título del juego">
       <p class="eyebrow">PROTOCOLO DE DEFENSA || BEECKER</p>
       <h1>NEXUS DEFENDER</h1>
-      <p class="subtitle">AI Network Defender <span class="version-badge">V2.0</span></p>
+      <p class="subtitle">AI Network Defender <span class="version-badge">V2.1</span></p>
     </header>
 
     <section class="game-panel" aria-label="Videojuego Nexus Defender">
@@ -102,7 +102,7 @@
                     <p class="key-binding-message" id="keyBindingMessage" role="status" aria-live="polite"></p>
                     <button class="secondary-button reset-bindings" id="resetKeyBindings" type="button">RESTABLECER TECLAS</button>
                   </fieldset>
-                  <div class="touch-settings"><strong>Controles de teléfono</strong><small>Mueve joysticks y botones a la posición que te resulte cómoda.</small><button class="secondary-button" id="editTouchMenu" type="button">PERSONALIZAR CONTROLES</button></div>
+                  <div class="touch-settings"><strong>Controles de teléfono</strong><small>La misión se juega horizontalmente. Mueve joysticks y botones a la posición que te resulte cómoda.</small><button class="secondary-button" id="editTouchMenu" type="button">PERSONALIZAR CONTROLES</button></div>
                   <label class="damage-option"><input id="damageNumbersToggle" type="checkbox"> Mostrar números de daño</label>
                   <fieldset class="audio-controls">
                     <legend>Audio</legend>
@@ -256,8 +256,14 @@
           <span class="stick-face"><span class="stick-knob" id="aimKnob"></span></span><small>APUNTAR</small>
         </div>
       </div>
+      <div class="orientation-gate" id="orientationGate" role="status" aria-live="assertive" aria-label="Gira el teléfono para jugar">
+        <div class="orientation-phone" aria-hidden="true"><span>↻</span></div>
+        <p class="eyebrow">MODO DE JUEGO MÓVIL</p>
+        <h2>Gira tu teléfono</h2>
+        <p>Nexus Defender se juega horizontalmente para mostrar toda la arena y dejar espacio a los dos joysticks.</p>
+      </div>
       <div class="touch-editor" id="touchEditor" role="dialog" aria-modal="true" aria-labelledby="touchEditorTitle" hidden>
-        <div class="touch-editor-panel"><span class="eyebrow">CONTROLES A TU MEDIDA</span><h2 id="touchEditorTitle">Coloca tus controles</h2><p>Arrastra los dos joysticks, Dash y Ultimate. Se guarda una distribución para teléfono vertical y otra para horizontal.</p><div class="touch-editor-actions"><button id="saveTouchLayout" type="button">GUARDAR</button><button id="resetTouchLayout" type="button">RESTABLECER</button><button id="cancelTouchLayout" type="button">CANCELAR</button></div><p id="touchEditorMessage" role="status" aria-live="polite"></p></div>
+        <div class="touch-editor-panel"><span class="eyebrow">CONTROLES A TU MEDIDA</span><h2 id="touchEditorTitle">Coloca tus controles</h2><p>Arrastra los dos joysticks, Dash y Ultimate. La partida móvil utiliza la distribución horizontal.</p><div class="touch-editor-actions"><button id="saveTouchLayout" type="button">GUARDAR</button><button id="resetTouchLayout" type="button">RESTABLECER</button><button id="cancelTouchLayout" type="button">CANCELAR</button></div><p id="touchEditorMessage" role="status" aria-live="polite"></p></div>
       </div>
     </section>
 
@@ -288,6 +294,6 @@
   <script src="js/cosmetic-art.js?v=1.8"></script>
   <script src="js/audio-system.js?v=1.6"></script>
   <script src="js/game-rules.js?v=1.5"></script>
-  <script src="js/game.js?v=2.0"></script>
+  <script src="js/game.js?v=2.1"></script>
 </body>
 </html>

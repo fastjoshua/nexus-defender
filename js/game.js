@@ -157,6 +157,7 @@ function safeStorageSet(key, value) {
 
 // Estado general del juego.
 let gameState = "menu"; // Posibles valores: menu, playing, paused, gameover.
+let orientationBlocked = false;
 let playerName = "Operador";
 let player;
 let threats = [];
@@ -478,6 +479,8 @@ function startGame() {
   gameState = "playing";
   document.body.classList.add("mobile-session");
   document.body.classList.remove("mobile-ended");
+  updateOrientationGate();
+  requestLandscapeMode();
   applyTouchLayout();
   startScreen.classList.remove("active");
   gameOverScreen.classList.remove("active");
@@ -488,7 +491,7 @@ function startGame() {
   pauseMessage.classList.remove("visible");
   lastTime = performance.now();
   ensureAudioContext();
-  startMusic();
+  if (!orientationBlocked) startMusic();
   // El foco pasa al área de juego para que el teclado funcione de inmediato.
   requestAnimationFrame(() => canvas.focus({ preventScroll: true }));
   if (selectedDifficulty === "bossrush") {
@@ -603,6 +606,8 @@ function spawnPowerUp() {
 /** Actualiza la partida. deltaTime representa segundos desde el cuadro anterior. */
 function update(deltaTime) {
   if (gameState !== "playing") return;
+  // En teléfono, la simulación espera hasta que la pantalla esté horizontal.
+  if (orientationBlocked) return;
   combatTime += deltaTime;
 
   // El reloj de nivel se detiene durante un jefe: hay que derrotarlo para avanzar.
@@ -2475,6 +2480,7 @@ function checkUpgradeSynergies() {
 function winGame() {
   gameState = "victory";
   document.body.classList.add("mobile-ended");
+  updateOrientationGate();
   releaseAllSticks();
   const finalScore = Math.floor(score);
   awardRunFragments(finalScore);
@@ -2510,6 +2516,7 @@ function winGame() {
 function endGame() {
   gameState = "gameover";
   document.body.classList.add("mobile-ended");
+  updateOrientationGate();
   releaseAllSticks();
   const finalScore = Math.floor(score);
   awardRunFragments(finalScore);
@@ -2551,6 +2558,7 @@ function draw(time) {
   if (player) CosmeticArt.aura(ctx, cosmeticCatalog.find(item => item.id === selectedAura),
     player.x + player.width / 2, player.y + player.height / 2, combatTime, lowPerformance);
   drawModuleFields();
+  drawMobileAimGuide();
   drawDashEchoes();
   if (player) drawPlayer();
   drawModuleSatellites();
@@ -3244,6 +3252,40 @@ function drawDashEchoes() {
   ctx.restore();
 }
 
+/** Guía móvil muy tenue: indica la dirección real sin competir con los ataques. */
+function drawMobileAimGuide() {
+  if (!player || !isTouchPhone() || !document.body.classList.contains("mobile-session") ||
+      aimMode !== "manual" || !(manualAim.hasDirection || manualAim.stickActive)) return;
+  const startX = player.x + player.width / 2;
+  const startY = player.y + player.height / 2;
+  const vectorX = manualAim.vectorX;
+  const vectorY = manualAim.vectorY;
+  if (Math.hypot(vectorX, vectorY) < 0.01) return;
+  const horizontalRange = vectorX > 0 ? (GAME_WIDTH - startX) / vectorX
+    : vectorX < 0 ? -startX / vectorX : Infinity;
+  const verticalRange = vectorY > 0 ? (GAME_HEIGHT - startY) / vectorY
+    : vectorY < 0 ? -startY / vectorY : Infinity;
+  const range = Math.max(0, Math.min(horizontalRange, verticalRange) - 12);
+  const endX = startX + vectorX * range;
+  const endY = startY + vectorY * range;
+
+  ctx.save();
+  ctx.setLineDash([3, 12]);
+  ctx.lineDashOffset = -combatTime * 7;
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(67, 255, 155, 0.13)";
+  ctx.beginPath();
+  ctx.moveTo(startX + vectorX * 30, startY + vectorY * 30);
+  ctx.lineTo(endX, endY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.globalAlpha = 0.18;
+  ctx.beginPath();
+  ctx.arc(endX, endY, 4, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function getSkinColors() {
   const skins = {
     cyan: { primary: "#00f0ff", secondary: "#e8f8ff", engine: "#a855f7" },
@@ -3869,6 +3911,7 @@ function renderAchievements() {
 function showStartMenu() {
   gameState = "menu";
   document.body.classList.remove("mobile-session", "mobile-ended");
+  updateOrientationGate();
   releaseAllSticks();
   stopMusic();
   gameOverScreen.classList.remove("active");
@@ -4124,6 +4167,37 @@ document.addEventListener("visibilitychange", () => {
 
 function currentTouchOrientation() { return innerWidth > innerHeight ? "landscape" : "portrait"; }
 
+function isTouchPhone() {
+  return navigator.maxTouchPoints > 0 && Math.min(innerWidth, innerHeight) <= 600 &&
+    Math.max(innerWidth, innerHeight) <= 1000;
+}
+
+function updateOrientationGate() {
+  const wasBlocked = orientationBlocked;
+  orientationBlocked = document.body.classList.contains("mobile-session") &&
+    !document.body.classList.contains("mobile-ended") && isTouchPhone() &&
+    currentTouchOrientation() === "portrait";
+  document.body.classList.toggle("orientation-blocked", orientationBlocked);
+  if (orientationBlocked) {
+    releaseAllSticks();
+    stopMusic();
+  } else if (wasBlocked && gameState === "playing") {
+    lastTime = performance.now();
+    startMusic();
+  }
+}
+
+async function requestLandscapeMode() {
+  if (!isTouchPhone() || currentTouchOrientation() === "landscape") return;
+  try {
+    if (screen.orientation?.lock) await screen.orientation.lock("landscape");
+  } catch (error) {
+    // iOS y varios navegadores solo permiten bloquear orientación en pantalla completa.
+    // La pantalla de giro permanece visible como alternativa segura.
+  }
+  updateOrientationGate();
+}
+
 function touchControlElements() {
   return { move: moveStick, aim: aimStick, dash: mobileDash, ultimate: mobileUltimate };
 }
@@ -4245,6 +4319,7 @@ window.addEventListener("resize", () => {
   touchDrag = null;
   document.querySelectorAll(".mobile-controls .dragging").forEach(item => item.classList.remove("dragging"));
   releaseAllSticks();
+  updateOrientationGate();
   applyTouchLayout();
   if (touchEditing) touchEditorMessage.textContent = currentTouchOrientation() === "portrait"
     ? "Ajustando controles verticales." : "Ajustando controles horizontales.";

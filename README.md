@@ -1,6 +1,12 @@
-# Nexus Defender V2.0
+# Nexus Defender V2.1
 
-## Versión oficial V2.0 · Controles móviles y teclas configurables
+## Actualización V2.1 · Misión horizontal y guía de puntería
+
+En teléfono, la misión se activa únicamente con la pantalla horizontal. Si se inicia en vertical, el tiempo, los enemigos y el nivel quedan detenidos bajo un aviso para girar el dispositivo; al rotarlo, la partida continúa automáticamente con toda la arena y los controles visibles. El juego intenta solicitar orientación horizontal cuando el navegador lo permite y conserva el aviso como alternativa compatible con iPhone y Android.
+
+Al usar el joystick de puntería aparece desde la nave una línea punteada casi invisible hasta el borde de la arena. La guía sigue la dirección real de los disparos, permanece detrás de los elementos de combate y desaparece fuera del modo manual.
+
+## Versión anterior V2.0 · Controles móviles y teclas configurables
 
 En teléfono, la misión usa una vista dedicada al juego y controles grandes bajo los pulgares. Los dos joysticks se centran al tocarlos, responden a un desplazamiento corto y mantienen la dirección aunque el dedo salga de su círculo. Movimiento y puntería funcionan con dos dedos simultáneos. Dash y Ultimate son botones separados junto al joystick de puntería.
 

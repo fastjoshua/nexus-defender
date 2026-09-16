@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
@@ -6,6 +7,8 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ channel: process.env.TEST_BROWSER || 'msedge', headless: true });
   try {
+    const output = path.resolve(__dirname, '..', 'work', 'verification');
+    fs.mkdirSync(output, { recursive: true });
     const url = pathToFileURL(path.resolve(__dirname, '..', 'index.html')).href;
     const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     const errors = [];
@@ -79,10 +82,23 @@ const { chromium } = require('playwright');
     await mobile.locator('#startForm .primary-button').click();
     const surface = await mobile.evaluate(() => ({ session: document.body.classList.contains('mobile-session'),
       visible: getComputedStyle(mobileControls).display !== 'none',
-      moveWidth: moveStick.getBoundingClientRect().width,
+      gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
+      blocked: orientationBlocked,
       overflow: document.documentElement.scrollWidth > innerWidth }));
-    assert.deepEqual([surface.session, surface.visible, surface.overflow], [true, true, false]);
-    assert(surface.moveWidth >= 140);
+    assert.deepEqual(surface, { session: true, visible: false, gate: true, blocked: true, overflow: false });
+    await mobile.screenshot({ path: path.join(output, 'v21-phone-rotate.png') });
+    const frozenTime = await mobile.evaluate(() => elapsedTime);
+    await mobile.waitForTimeout(180);
+    assert.equal(await mobile.evaluate(() => elapsedTime), frozenTime);
+    await mobile.setViewportSize({ width: 844, height: 390 });
+    await mobile.waitForTimeout(80);
+    const horizontal = await mobile.evaluate(() => ({ visible: getComputedStyle(mobileControls).display !== 'none',
+      gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
+      blocked: orientationBlocked, moveWidth: moveStick.getBoundingClientRect().width }));
+    assert.deepEqual([horizontal.visible, horizontal.gate, horizontal.blocked], [true, false, false]);
+    assert(horizontal.moveWidth >= 100);
+    await mobile.screenshot({ path: path.join(output, 'v21-phone-landscape.png') });
+    console.log('PASS La misión móvil espera en vertical y habilita el juego al girar horizontalmente');
     const overlay = await mobile.evaluate(() => {
       showUpgradeSelection();
       const hidden = getComputedStyle(mobileControls).display === 'none';
@@ -113,9 +129,19 @@ const { chromium } = require('playwright');
     assert.equal(aiming.mode, 'manual');
     assert.equal(aiming.active, true);
     assert(aiming.x < -.7);
+    const guide = await mobile.evaluate(() => {
+      const calls = [];
+      const original = ctx.setLineDash.bind(ctx);
+      ctx.setLineDash = pattern => { calls.push([...pattern]); original(pattern); };
+      drawMobileAimGuide();
+      ctx.setLineDash = original;
+      return calls;
+    });
+    assert(guide.some(pattern => pattern[0] === 3 && pattern[1] === 12));
+    await mobile.screenshot({ path: path.join(output, 'v21-aim-guide.png') });
     await mobile.mouse.up();
     assert.equal(await mobile.evaluate(() => manualAim.stickActive), false);
-    console.log('PASS Joysticks flotantes, respuesta temprana, captura fuera del círculo y puntería');
+    console.log('PASS Joysticks flotantes y guía punteada tenue siguen la puntería móvil');
 
     const cdp = await mobile.context().newCDPSession(mobile);
     const moveTouch = await mobile.locator('#moveStick').boundingBox();
@@ -144,13 +170,13 @@ const { chromium } = require('playwright');
     await mobile.mouse.move(deck.x + deck.width * .50, deck.y + deck.height * .34);
     await mobile.mouse.up();
     await mobile.locator('#saveTouchLayout').click();
-    const portrait = await mobile.evaluate(() => ({ point: touchLayouts.portrait.dash,
-      stored: JSON.parse(safeStorageGet(SETTINGS_KEY)).touchLayouts.portrait.dash,
+    const landscape = await mobile.evaluate(() => ({ point: touchLayouts.landscape.dash,
+      stored: JSON.parse(safeStorageGet(SETTINGS_KEY)).touchLayouts.landscape.dash,
       gameState }));
-    assert.equal(portrait.gameState, 'playing');
-    assert.deepEqual(portrait.point, portrait.stored);
-    assert(Math.abs(portrait.point.x - .5) < .04);
-    assert(Math.abs(portrait.point.y - .34) < .04);
+    assert.equal(landscape.gameState, 'playing');
+    assert.deepEqual(landscape.point, landscape.stored);
+    assert(Math.abs(landscape.point.x - .5) < .04);
+    assert(Math.abs(landscape.point.y - .34) < .04);
 
     await mobile.locator('#editTouchGame').click();
     const ultimate = await mobile.locator('#mobileUltimate').boundingBox();
@@ -159,30 +185,16 @@ const { chromium } = require('playwright');
     await mobile.mouse.move(deck.x + deck.width * .50, deck.y + deck.height * .70);
     await mobile.mouse.up();
     await mobile.locator('#cancelTouchLayout').click();
-    assert.deepEqual(await mobile.evaluate(() => touchLayouts.portrait.ultimate),
-      { x: .55, y: .78 });
+    assert.deepEqual(await mobile.evaluate(() => touchLayouts.landscape.ultimate),
+      { x: .8, y: .75 });
     console.log('PASS Editor táctil guarda una posición y Cancelar recupera la anterior');
 
-    await mobile.setViewportSize({ width: 844, height: 390 });
-    assert.equal(await mobile.locator('#moveStick').isVisible(), true);
-    await mobile.locator('#editTouchGame').click();
-    const landscapeBefore = await mobile.evaluate(() => touchLayouts.landscape.dash.x);
-    const landscapeDeck = await mobile.locator('#mobileControls').boundingBox();
-    const landscapeDash = await mobile.locator('#mobileDash').boundingBox();
-    await mobile.mouse.move(landscapeDash.x + landscapeDash.width / 2,
-      landscapeDash.y + landscapeDash.height / 2);
-    await mobile.mouse.down();
-    await mobile.mouse.move(landscapeDeck.x + landscapeDeck.width * .75,
-      landscapeDeck.y + landscapeDeck.height * .23);
-    await mobile.mouse.up();
-    await mobile.locator('#saveTouchLayout').click();
-    const landscapeAfter = await mobile.evaluate(() => touchLayouts.landscape.dash.x);
-    assert(landscapeAfter < landscapeBefore);
     await mobile.setViewportSize({ width: 390, height: 844 });
-    assert(Math.abs(await mobile.evaluate(() => touchLayouts.portrait.dash.x) - .5) < .04);
+    assert.equal(await mobile.evaluate(() => orientationBlocked), true);
+    assert(Math.abs(await mobile.evaluate(() => touchLayouts.portrait.dash.x) - .55) < .04);
     await mobile.reload();
-    assert(Math.abs(await mobile.evaluate(() => touchLayouts.portrait.dash.x) - .5) < .04);
-    assert(Math.abs(await mobile.evaluate(() => touchLayouts.landscape.dash.x) - .75) < .04);
+    assert(Math.abs(await mobile.evaluate(() => touchLayouts.portrait.dash.x) - .55) < .04);
+    assert(Math.abs(await mobile.evaluate(() => touchLayouts.landscape.dash.x) - .5) < .04);
     console.log('PASS Distribuciones vertical y horizontal se guardan por separado y persisten');
 
     await mobile.locator('.menu-advanced summary').click();

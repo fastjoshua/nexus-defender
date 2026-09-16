@@ -1,4 +1,15 @@
-# Nexus Defender V2.0 · Controles móviles y teclas configurables
+# Nexus Defender V2.1 · Juego horizontal y guía de puntería
+
+**Fecha:** 16 de septiembre de 2026.
+
+- La misión móvil queda detenida en orientación vertical y muestra una pantalla clara para girar el teléfono.
+- Al pasar a horizontal, la arena, los dos joysticks, Dash y Ultimate se activan automáticamente.
+- Solicitud de bloqueo horizontal cuando el navegador lo admite, con alternativa visual compatible cuando no está disponible.
+- Línea punteada de puntería manual con opacidad mínima, desde la nave hasta el límite de la arena.
+- La guía sigue el joystick, se dibuja detrás de la acción y no modifica la trayectoria ni el daño.
+- Pruebas móviles actualizadas para orientación, congelación de la simulación, reanudación y guía visual.
+
+## Versión anterior: V2.0 · Controles móviles y teclas configurables
 
 **Fecha:** 15 de septiembre de 2026.
 
