@@ -351,6 +351,7 @@ applySavedSettings();
 updateDifficultyAvailability();
 renderAchievements();
 renderCosmeticStore();
+updateOrientationGate();
 drawBackground(0);
 
 /** Prepara todos los datos necesarios para una partida nueva. */
@@ -4174,9 +4175,9 @@ function isTouchPhone() {
 
 function updateOrientationGate() {
   const wasBlocked = orientationBlocked;
-  orientationBlocked = document.body.classList.contains("mobile-session") &&
-    !document.body.classList.contains("mobile-ended") && isTouchPhone() &&
-    currentTouchOrientation() === "portrait";
+  // En teléfono toda la experiencia (incluido el menú) se usa en horizontal.
+  // No dependemos de que la misión haya comenzado para mostrar este aviso.
+  orientationBlocked = isTouchPhone() && currentTouchOrientation() === "portrait";
   document.body.classList.toggle("orientation-blocked", orientationBlocked);
   if (orientationBlocked) {
     releaseAllSticks();

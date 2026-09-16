@@ -79,26 +79,36 @@ const { chromium } = require('playwright');
     mobile.on('pageerror', error => errors.push(error.message));
     mobile.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await mobile.goto(url);
-    await mobile.locator('#startForm .primary-button').click();
-    const surface = await mobile.evaluate(() => ({ session: document.body.classList.contains('mobile-session'),
-      visible: getComputedStyle(mobileControls).display !== 'none',
+    const portraitMenu = await mobile.evaluate(() => ({ session: document.body.classList.contains('mobile-session'),
       gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
       blocked: orientationBlocked,
       overflow: document.documentElement.scrollWidth > innerWidth }));
-    assert.deepEqual(surface, { session: true, visible: false, gate: true, blocked: true, overflow: false });
+    assert.deepEqual(portraitMenu, { session: false, gate: true, blocked: true, overflow: false });
     await mobile.screenshot({ path: path.join(output, 'v21-phone-rotate.png') });
-    const frozenTime = await mobile.evaluate(() => elapsedTime);
-    await mobile.waitForTimeout(180);
-    assert.equal(await mobile.evaluate(() => elapsedTime), frozenTime);
     await mobile.setViewportSize({ width: 844, height: 390 });
     await mobile.waitForTimeout(80);
-    const horizontal = await mobile.evaluate(() => ({ visible: getComputedStyle(mobileControls).display !== 'none',
+    const horizontalMenu = await mobile.evaluate(() => ({ menu: getComputedStyle(startScreen).display !== 'none',
       gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
-      blocked: orientationBlocked, moveWidth: moveStick.getBoundingClientRect().width }));
-    assert.deepEqual([horizontal.visible, horizontal.gate, horizontal.blocked], [true, false, false]);
+      blocked: orientationBlocked,
+      fullWidth: Math.abs(document.querySelector('.menu-layout').getBoundingClientRect().width - innerWidth) < 20,
+      fullHeight: Math.abs(document.querySelector('.menu-layout').getBoundingClientRect().height - innerHeight) < 20 }));
+    assert.deepEqual(horizontalMenu, { menu: true, gate: false, blocked: false, fullWidth: true, fullHeight: true });
+    await mobile.screenshot({ path: path.join(output, 'v21-phone-landscape-menu.png') });
+    await mobile.locator('#startForm .primary-button').click();
+    const horizontal = await mobile.evaluate(() => {
+      const arena = document.querySelector('.canvas-wrap').getBoundingClientRect();
+      const controls = mobileControls.getBoundingClientRect();
+      return { visible: getComputedStyle(mobileControls).display !== 'none',
+        gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
+        blocked: orientationBlocked, moveWidth: moveStick.getBoundingClientRect().width,
+        arenaFull: Math.abs(arena.width - innerWidth) < 2 && Math.abs(arena.height - innerHeight) < 2,
+        controlsOverlay: Math.abs(controls.width - arena.width) < 2 && Math.abs(controls.height - arena.height) < 2 };
+    });
+    assert.deepEqual([horizontal.visible, horizontal.gate, horizontal.blocked,
+      horizontal.arenaFull, horizontal.controlsOverlay], [true, false, false, true, true]);
     assert(horizontal.moveWidth >= 100);
     await mobile.screenshot({ path: path.join(output, 'v21-phone-landscape.png') });
-    console.log('PASS La misión móvil espera en vertical y habilita el juego al girar horizontalmente');
+    console.log('PASS Menú y misión exigen horizontal; la arena llena el teléfono y los controles se superponen');
     const overlay = await mobile.evaluate(() => {
       showUpgradeSelection();
       const hidden = getComputedStyle(mobileControls).display === 'none';
@@ -197,12 +207,14 @@ const { chromium } = require('playwright');
     assert(Math.abs(await mobile.evaluate(() => touchLayouts.landscape.dash.x) - .5) < .04);
     console.log('PASS Distribuciones vertical y horizontal se guardan por separado y persisten');
 
+    await mobile.setViewportSize({ width: 844, height: 390 });
+    await mobile.waitForTimeout(60);
     await mobile.locator('.menu-advanced summary').click();
     await mobile.locator('#editTouchMenu').click();
     assert.equal(await mobile.locator('#touchEditor').isVisible(), true);
     await mobile.locator('#resetTouchLayout').click();
     await mobile.locator('#saveTouchLayout').click();
-    assert.deepEqual(await mobile.evaluate(() => touchLayouts.portrait.dash), { x: .55, y: .22 });
+    assert.deepEqual(await mobile.evaluate(() => touchLayouts.landscape.dash), { x: .8, y: .23 });
     assert.equal(await mobile.evaluate(() => gameState), 'menu');
     console.log('PASS El editor también abre desde el menú y restablece la orientación actual');
 

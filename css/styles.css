@@ -1264,8 +1264,8 @@ footer {
   body.mobile-ended .mobile-controls { display: none; }
   body.mobile-session:has(#upgradeScreen.active, #storeScreen.active, #bestiaryScreen.active) .mobile-controls { display: none; }
   body.control-editing .mobile-controls { display: block; }
-  body.mobile-session.orientation-blocked .mobile-controls { display: none !important; }
-  body.mobile-session.orientation-blocked .orientation-gate {
+  body.orientation-blocked .mobile-controls { display: none !important; }
+  body.orientation-blocked .orientation-gate {
     position: fixed; inset: 0; z-index: 80; display: grid; align-content: center;
     padding: 30px; color: #e8f8ff; text-align: center;
     background: radial-gradient(circle at 50% 45%, rgba(0,240,255,.12), transparent 32%), #030a17;
@@ -1328,17 +1328,88 @@ footer {
   .module-toast { top: 52px; padding: 6px 8px; font-size: .52rem; }
 }
 
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
-  .mobile-controls { height: calc(126px + env(safe-area-inset-bottom)); border: 0; background: transparent; pointer-events: none; }
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 600px) {
+  body { overflow: hidden; }
+
+  /* El menú también está diseñado como una pantalla horizontal completa. */
+  body:not(.mobile-session) .brand,
+  body:not(.mobile-session) .records-panel,
+  body:not(.mobile-session) footer { display: none; }
+  body:not(.mobile-session) .game-shell { width: 100vw; height: 100dvh; padding: 0; }
+  body:not(.mobile-session) .game-panel { height: 100dvh; border: 0; border-radius: 0; }
+  body:not(.mobile-session) .hud { display: none; }
+  body:not(.mobile-session) .canvas-wrap { width: 100vw; height: 100dvh; min-height: 0; aspect-ratio: auto; }
+  #startScreen { position: absolute; inset: 0; padding: max(5px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); overflow: hidden; }
+  #startScreen.active { display: grid; place-items: center; }
+  .menu-layout { display: grid; grid-template-columns: minmax(230px, .8fr) minmax(390px, 1.2fr); width: 100%; height: 100%; margin: 0; overflow: hidden; border-radius: 12px; }
+  .menu-hero, .menu-control-panel { min-height: 0; padding: 9px 12px; }
+  .menu-control-panel { border-top: 0; border-left: 1px solid rgba(109, 207, 250, .16); }
+  .menu-hero-top { min-height: 18px; }
+  .menu-sector, .menu-kicker, .menu-panel-heading > span { font-size: .48rem; }
+  .menu-kicker { margin: 5px 0 2px; }
+  .menu-hero h2 { font-size: clamp(1.45rem, 5.4vh, 2rem); }
+  .menu-hero .mission-story { margin: 4px 0 5px; font-size: .56rem; line-height: 1.3; }
+  .menu-hero-visual { flex: 1 1 auto; width: 100%; min-height: 72px; margin: 0 0 5px; aspect-ratio: auto; border-radius: 9px; }
+  .menu-visual-label { right: 6px; bottom: 5px; padding: 3px 5px; font-size: .43rem; }
+  .menu-visual-label strong { margin-top: 1px; font-size: .55rem; }
+  .menu-equipped { bottom: 5px; left: 5px; gap: 2px; }
+  .menu-equipped span { padding: 2px 4px; font-size: .42rem; }
+  .menu-mission-facts { gap: 4px; margin-bottom: 5px; }
+  .menu-mission-facts div { padding: 3px 6px; }
+  .menu-mission-facts strong { font-size: .72rem; }
+  .menu-mission-facts span { font-size: .42rem; }
+  .menu-links { gap: 4px; }
+  .menu-links .secondary-button { min-height: 27px; padding: 3px; font-size: .48rem; }
+  .menu-panel-heading { margin-bottom: 3px; }
+  .menu-panel-heading h3 { margin: 2px 0; font-size: 1.05rem; }
+  .menu-panel-heading p { display: none; }
+  #startForm { max-height: none; overflow: hidden; }
+  .menu-fields { gap: 5px; overflow-y: auto; padding-right: 3px; }
+  .menu-name-field { gap: 2px; }
+  .menu-name-field label, #startForm legend { font-size: .5rem; }
+  .menu-name-field input { padding: 5px 8px; font-size: .68rem; }
+  #startForm .skin-options { gap: 5px; }
+  #startForm .skin-option { gap: 1px; padding: 3px 2px; border-radius: 7px; }
+  #startForm .skin-preview { width: 42px; height: 42px; }
+  #startForm .skin-option small { font-size: .55rem; }
+  #startForm .skin-role, .ship-card .ship-state, .ship-unlock { font-size: .43rem; }
+  .ship-card .ship-state, .ship-unlock { min-height: 0; padding: 2px; }
+  #startForm .skin-description, .ship-purchase-message { margin: 2px 2px 0; min-height: 0; font-size: .49rem; }
+  #startForm .mode-selector { gap: 4px; }
+  #startForm .mode-selector label { padding: 4px; }
+  #startForm .mode-selector span { font-size: .54rem; }
+  #startForm .mode-selector small { display: none; }
+  .menu-advanced summary { padding: 5px 8px; font-size: .53rem; }
+  .menu-advanced-content { gap: 4px; padding: 0 7px 6px; }
+  .menu-actions { margin-top: 4px; padding-top: 4px; }
+  .menu-actions .primary-button { padding: 7px 11px; font-size: .68rem; }
+  .menu-actions .primary-button span { font-size: .9rem; }
+  .menu-actions small { display: none; }
+
+  /* Arena a pantalla completa: HUD y controles flotan encima del Canvas. */
+  body.mobile-session .game-shell,
+  body.mobile-session .game-panel,
+  body.mobile-session .canvas-wrap { width: 100vw; height: 100dvh; }
+  body.mobile-session .game-panel { display: block; }
+  body.mobile-session .canvas-wrap { position: fixed; inset: 0; min-height: 0; margin: 0; aspect-ratio: auto; transform: none; }
+  body.mobile-session #gameCanvas { width: 100%; height: 100%; }
+  body.mobile-session .hud { position: fixed; top: 0; right: 0; left: 0; z-index: 31; height: 40px; padding: 0 max(5px, env(safe-area-inset-right)) 0 max(5px, env(safe-area-inset-left)); background: linear-gradient(180deg, rgba(2, 8, 18, .9), rgba(2, 8, 18, .15)); pointer-events: none; }
+  body.mobile-session .hud > div { padding: 4px 3px; background: transparent; }
+  body.mobile-session .hud span { font-size: .39rem; }
+  body.mobile-session .hud strong { font-size: .61rem; }
+  .mobile-controls { position: fixed; inset: 0; z-index: 32; width: 100vw; height: 100dvh; border: 0; background: transparent; pointer-events: none; }
+  body.control-editing .mobile-controls { z-index: 56; }
   .mobile-controls [data-control], .mobile-controls .edit-touch-shortcut { pointer-events: auto; }
   .touch-stick { width: 108px; height: 108px; }
   .stick-face { width: 90px; height: 90px; }
   .stick-knob { width: 36px; height: 36px; }
   .mobile-controls .dash-button, .mobile-controls .ultimate-button { width: 49px; height: 49px; font-size: .59rem; }
   .touch-stick small { bottom: 0; font-size: .46rem; }
-  .mobile-controls .edit-touch-shortcut { top: 2px; right: auto; left: 50%; transform: translateX(-50%); }
-  body.mobile-session .canvas-wrap { width: min(calc(100vw - 230px), calc(160dvh - 120px)); transform: translateX(-40px); }
-  .touch-editor { padding: 6px 14px 135px; }
+  .mobile-controls .edit-touch-shortcut { top: 45px; right: auto; left: 50%; transform: translateX(-50%); }
+  .dash-indicator { top: 44px; right: max(7px, env(safe-area-inset-right)); bottom: auto; }
+  .ultimate-indicator { top: 44px; bottom: auto; left: max(7px, env(safe-area-inset-left)); }
+  .level-progress, .boss-bar { right: 136px; bottom: max(5px, env(safe-area-inset-bottom)); left: 136px; }
+  .touch-editor { padding: 6px 14px; }
   .touch-editor-panel { margin: 0 auto; padding: 10px 14px; }
   .touch-editor-panel h2 { margin: 3px 0; font-size: 1.25rem; }
   .touch-editor-panel p { margin: 4px 0; font-size: .59rem; }

@@ -2,7 +2,7 @@
 
 ## Actualización V2.1 · Misión horizontal y guía de puntería
 
-En teléfono, la misión se activa únicamente con la pantalla horizontal. Si se inicia en vertical, el tiempo, los enemigos y el nivel quedan detenidos bajo un aviso para girar el dispositivo; al rotarlo, la partida continúa automáticamente con toda la arena y los controles visibles. El juego intenta solicitar orientación horizontal cuando el navegador lo permite y conserva el aviso como alternativa compatible con iPhone y Android.
+En teléfono, toda la experiencia se usa en horizontal desde el menú principal. Si el dispositivo está vertical, aparece un aviso para girarlo antes de elegir la nave o iniciar; al rotarlo, el menú se adapta automáticamente. Durante la misión, la arena ocupa el ancho y alto completos del teléfono y los joysticks, Dash y Ultimate flotan encima del juego, sin reservar espacio fuera del campo. El juego intenta solicitar orientación horizontal cuando el navegador lo permite y conserva el aviso como alternativa compatible con iPhone y Android.
 
 Al usar el joystick de puntería aparece desde la nave una línea punteada casi invisible hasta el borde de la arena. La guía sigue la dirección real de los disparos, permanece detrás de los elementos de combate y desaparece fuera del modo manual.
 

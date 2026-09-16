@@ -2,12 +2,13 @@
 
 **Fecha:** 16 de septiembre de 2026.
 
-- La misión móvil queda detenida en orientación vertical y muestra una pantalla clara para girar el teléfono.
-- Al pasar a horizontal, la arena, los dos joysticks, Dash y Ultimate se activan automáticamente.
+- La experiencia móvil exige orientación horizontal desde el menú principal y muestra una pantalla clara para girar el teléfono.
+- Al pasar a horizontal, el menú se adapta al alto disponible y la arena ocupa toda la pantalla durante la misión.
+- Los dos joysticks, Dash y Ultimate flotan encima del campo de juego, sin reducir el espacio jugable.
 - Solicitud de bloqueo horizontal cuando el navegador lo admite, con alternativa visual compatible cuando no está disponible.
 - Línea punteada de puntería manual con opacidad mínima, desde la nave hasta el límite de la arena.
 - La guía sigue el joystick, se dibuja detrás de la acción y no modifica la trayectoria ni el daño.
-- Pruebas móviles actualizadas para orientación, congelación de la simulación, reanudación y guía visual.
+- Pruebas móviles actualizadas para menú horizontal, arena completa, controles superpuestos, bloqueo vertical y guía visual.
 
 ## Versión anterior: V2.0 · Controles móviles y teclas configurables
 
