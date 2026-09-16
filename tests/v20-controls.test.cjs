@@ -101,11 +101,13 @@ const { chromium } = require('playwright');
       return { visible: getComputedStyle(mobileControls).display !== 'none',
         gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
         blocked: orientationBlocked, moveWidth: moveStick.getBoundingClientRect().width,
+        fullscreen: !!document.fullscreenElement,
         arenaFull: Math.abs(arena.width - innerWidth) < 2 && Math.abs(arena.height - innerHeight) < 2,
         controlsOverlay: Math.abs(controls.width - arena.width) < 2 && Math.abs(controls.height - arena.height) < 2 };
     });
     assert.deepEqual([horizontal.visible, horizontal.gate, horizontal.blocked,
-      horizontal.arenaFull, horizontal.controlsOverlay], [true, false, false, true, true]);
+      horizontal.fullscreen, horizontal.arenaFull, horizontal.controlsOverlay],
+      [true, false, false, true, true, true]);
     assert(horizontal.moveWidth >= 100);
     await mobile.screenshot({ path: path.join(output, 'v21-phone-landscape.png') });
     console.log('PASS Menú y misión exigen horizontal; la arena llena el teléfono y los controles se superponen');

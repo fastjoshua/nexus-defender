@@ -1,4 +1,13 @@
-# Nexus Defender V2.2 · Aplicación instalable y pantalla completa
+# Nexus Defender V2.2.1 · Pantalla completa sin botón de instalación
+
+**Fecha:** 16 de septiembre de 2026.
+
+- Se retiró del menú el botón de instalación y descarga solicitado para simplificar la portada móvil.
+- Al pulsar **Iniciar misión**, los teléfonos compatibles solicitan directamente la pantalla completa.
+- La arena conserva el tamaño completo del dispositivo y los controles permanecen superpuestos.
+- La capacidad PWA sigue disponible desde el menú propio del navegador, sin promoción dentro del juego.
+
+## Versión anterior: V2.2 · Aplicación instalable y pantalla completa
 
 **Fecha:** 16 de septiembre de 2026.
 

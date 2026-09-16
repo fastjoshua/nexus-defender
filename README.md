@@ -1,4 +1,8 @@
-# Nexus Defender V2.2
+# Nexus Defender V2.2.1
+
+## Ajuste V2.2.1 · Juego móvil directo a pantalla completa
+
+El menú ya no muestra una opción para instalar o descargar la aplicación. En teléfonos compatibles, **Iniciar misión** solicita directamente la pantalla completa mediante el gesto del jugador; la arena y los controles permanecen superpuestos ocupando todo el espacio disponible. La PWA continúa disponible desde las opciones propias del navegador, sin ocupar espacio dentro del juego.
 
 ## Actualización V2.2 · Aplicación instalable y pantalla completa
 

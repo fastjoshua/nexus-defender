@@ -15,20 +15,20 @@ test('PWA abre instalada en pantalla completa horizontal', () => {
   assert(fs.existsSync(path.join(root, 'icons', 'nexus-defender.svg')));
 });
 
-test('el menú ofrece instalación y pantalla completa mediante gesto', () => {
+test('la misión solicita pantalla completa sin mostrar instalación en el menú', () => {
   const html = read('index.html');
   const game = read('js/game.js');
-  assert.match(html, /rel="manifest" href="manifest\.webmanifest\?v=2\.2"/);
-  assert.match(html, /id="installAppButton"/);
-  assert.match(game, /beforeinstallprompt/);
+  assert.match(html, /rel="manifest" href="manifest\.webmanifest\?v=2\.2\.1"/);
+  assert.doesNotMatch(html, /id="installAppButton"/);
+  assert.doesNotMatch(game, /beforeinstallprompt/);
   assert.match(game, /requestFullscreen/);
-  assert.match(game, /if \(isTouchPhone\(\)\) requestAppFullscreen\(false\)/);
+  assert.match(game, /if \(isTouchPhone\(\)\) requestAppFullscreen\(\)/);
 });
 
 test('el Service Worker conserva el juego y elimina cachés anteriores', () => {
   const worker = read('service-worker.js');
-  assert.match(worker, /nexus-defender-v2\.2/);
-  assert.match(worker, /\.\/js\/game\.js\?v=2\.2/);
+  assert.match(worker, /nexus-defender-v2\.2\.1/);
+  assert.match(worker, /\.\/js\/game\.js\?v=2\.2\.1/);
   assert.match(worker, /caches\.delete/);
   assert.match(worker, /event\.request\.mode === "navigate"/);
 });
