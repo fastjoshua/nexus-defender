@@ -1,4 +1,14 @@
-# Nexus Defender V2.1 · Juego horizontal y guía de puntería
+# Nexus Defender V2.2 · Aplicación instalable y pantalla completa
+
+**Fecha:** 16 de septiembre de 2026.
+
+- Manifest PWA con apertura horizontal, modo `fullscreen`, identidad visual y acceso desde un icono instalado.
+- Botón visible para instalar la aplicación o activar y desactivar pantalla completa.
+- Solicitud de pantalla completa al iniciar una misión móvil, respetando el requisito del navegador de usar un gesto del jugador.
+- Instrucción específica para agregar a inicio en iPhone cuando la instalación automática no está disponible.
+- Service Worker con actualización de páginas por red y respaldo sin conexión del juego, la galería y sus recursos.
+
+## Versión anterior: V2.1 · Juego horizontal y guía de puntería
 
 **Fecha:** 16 de septiembre de 2026.
 

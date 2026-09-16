@@ -1,0 +1,23 @@
+{
+  "id": "./",
+  "name": "Nexus Defender: AI Network Defender",
+  "short_name": "Nexus Defender",
+  "description": "Defiende el Nexo, derrota a los guardianes estelares y vence a YACERAMI.",
+  "lang": "es-MX",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "landscape",
+  "background_color": "#020611",
+  "theme_color": "#071123",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "icons/nexus-defender.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

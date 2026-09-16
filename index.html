@@ -3,16 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Nexus Defender V2.1, videojuego web de defensa de redes.">
-  <title>Nexus Defender V2.1</title>
-  <link rel="stylesheet" href="css/styles.css?v=2.1.1">
+  <meta name="description" content="Nexus Defender V2.2, videojuego web de defensa de redes instalable.">
+  <meta name="theme-color" content="#071123">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nexus Defender">
+  <title>Nexus Defender V2.2</title>
+  <link rel="manifest" href="manifest.webmanifest?v=2.2">
+  <link rel="icon" href="icons/nexus-defender.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css?v=2.2">
 </head>
 <body>
   <main class="game-shell">
     <header class="brand" aria-label="Título del juego">
       <p class="eyebrow">PROTOCOLO DE DEFENSA || BEECKER</p>
       <h1>NEXUS DEFENDER</h1>
-      <p class="subtitle">AI Network Defender <span class="version-badge">V2.1</span></p>
+      <p class="subtitle">AI Network Defender <span class="version-badge">V2.2</span></p>
     </header>
 
     <section class="game-panel" aria-label="Videojuego Nexus Defender">
@@ -115,7 +121,12 @@
                 </div>
               </details>
               </div>
-              <div class="menu-actions"><button class="primary-button" type="submit">INICIAR MISIÓN <span>→</span></button><small id="keyHint">WASD / FLECHAS · DASH: SHIFT · ULTIMATE: Q</small></div>
+              <div class="menu-actions">
+                <button class="primary-button" type="submit">INICIAR MISIÓN <span>→</span></button>
+                <button class="secondary-button app-install-button" id="installAppButton" type="button">▣ INSTALAR / PANTALLA COMPLETA</button>
+                <small class="app-install-message" id="appInstallMessage" role="status" aria-live="polite"></small>
+                <small id="keyHint">WASD / FLECHAS · DASH: SHIFT · ULTIMATE: Q</small>
+              </div>
               </form>
             </div>
           </div>
@@ -294,6 +305,6 @@
   <script src="js/cosmetic-art.js?v=1.8"></script>
   <script src="js/audio-system.js?v=1.6"></script>
   <script src="js/game-rules.js?v=1.5"></script>
-  <script src="js/game.js?v=2.1.1"></script>
+  <script src="js/game.js?v=2.2"></script>
 </body>
 </html>

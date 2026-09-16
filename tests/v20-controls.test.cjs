@@ -199,7 +199,12 @@ const { chromium } = require('playwright');
       { x: .8, y: .75 });
     console.log('PASS Editor táctil guarda una posición y Cancelar recupera la anterior');
 
+    // El inicio móvil solicita pantalla completa; salir permite simular el giro
+    // de viewport que valida el bloqueo vertical de forma determinista.
+    await mobile.evaluate(() => document.exitFullscreen?.());
+    await mobile.waitForTimeout(60);
     await mobile.setViewportSize({ width: 390, height: 844 });
+    await mobile.waitForTimeout(60);
     assert.equal(await mobile.evaluate(() => orientationBlocked), true);
     assert(Math.abs(await mobile.evaluate(() => touchLayouts.portrait.dash.x) - .55) < .04);
     await mobile.reload();

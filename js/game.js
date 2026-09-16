@@ -51,6 +51,8 @@ const keyBindingGrid = document.getElementById("keyBindingGrid");
 const keyBindingMessage = document.getElementById("keyBindingMessage");
 const keyHint = document.getElementById("keyHint");
 const resetKeyBindingsButton = document.getElementById("resetKeyBindings");
+const installAppButton = document.getElementById("installAppButton");
+const appInstallMessage = document.getElementById("appInstallMessage");
 const dashIndicator = document.getElementById("dashIndicator");
 const levelProgressText = document.getElementById("levelProgressText");
 const levelProgressBar = document.getElementById("levelProgressBar");
@@ -343,6 +345,7 @@ const bestiaryPreviews = [
 ];
 const reducePreviewMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 let lastBestiaryDraw = 0;
+let deferredInstallPrompt = null;
 
 hudHighScore.textContent = formatScore(highScore);
 renderRecords();
@@ -352,6 +355,8 @@ updateDifficultyAvailability();
 renderAchievements();
 renderCosmeticStore();
 updateOrientationGate();
+updateAppModeButton();
+registerServiceWorker();
 drawBackground(0);
 
 /** Prepara todos los datos necesarios para una partida nueva. */
@@ -4013,6 +4018,9 @@ function formatScore(value) {
 // Eventos de formulario y teclado.
 startForm.addEventListener("submit", (event) => {
   event.preventDefault();
+  // El navegador exige un gesto del jugador para entrar a pantalla completa.
+  // El botón de inicio proporciona ese gesto en teléfonos compatibles.
+  if (isTouchPhone()) requestAppFullscreen(false);
   const typedName = document.getElementById("playerName").value.trim();
   playerName = typedName || "Operador";
   selectedSkin = ownedShips.includes(startForm.elements.skin.value) ? startForm.elements.skin.value : "cyan";
@@ -4023,6 +4031,19 @@ startForm.addEventListener("submit", (event) => {
   aimMode = startForm.elements.aimMode.value;
   saveSettings();
   startGame();
+});
+
+installAppButton.addEventListener("click", handleAppModeRequest);
+document.addEventListener("fullscreenchange", updateAppModeButton);
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  updateAppModeButton();
+});
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  appInstallMessage.textContent = "Nexus Defender quedó instalado correctamente.";
+  updateAppModeButton();
 });
 
 document.querySelectorAll(".ship-unlock").forEach(button =>
@@ -4171,6 +4192,71 @@ function currentTouchOrientation() { return innerWidth > innerHeight ? "landscap
 function isTouchPhone() {
   return navigator.maxTouchPoints > 0 && Math.min(innerWidth, innerHeight) <= 600 &&
     Math.max(innerWidth, innerHeight) <= 1000;
+}
+
+function isInstalledApp() {
+  return window.matchMedia("(display-mode: fullscreen)").matches ||
+    window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+}
+
+function updateAppModeButton() {
+  if (!installAppButton) return;
+  installAppButton.disabled = false;
+  if (isInstalledApp()) {
+    installAppButton.textContent = "✓ APP INSTALADA · PANTALLA COMPLETA";
+    installAppButton.disabled = true;
+  } else if (document.fullscreenElement) {
+    installAppButton.textContent = "□ SALIR DE PANTALLA COMPLETA";
+  } else if (deferredInstallPrompt) {
+    installAppButton.textContent = "▣ INSTALAR NEXUS DEFENDER";
+  } else {
+    installAppButton.textContent = "▣ INSTALAR / PANTALLA COMPLETA";
+  }
+}
+
+async function requestAppFullscreen(showMessage = true) {
+  if (isInstalledApp() || document.fullscreenElement) return true;
+  try {
+    if (document.documentElement.requestFullscreen) {
+      await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+      await requestLandscapeMode();
+      if (showMessage) appInstallMessage.textContent = "Pantalla completa activada.";
+      updateAppModeButton();
+      return true;
+    }
+  } catch (error) {
+    // Algunos navegadores solo aceptan pantalla completa desde un gesto directo.
+  }
+  if (showMessage) appInstallMessage.textContent = /iphone|ipad|ipod/i.test(navigator.userAgent)
+    ? "En iPhone: Compartir → Agregar a inicio. Después ábrelo desde su icono."
+    : "Usa el menú del navegador → Instalar aplicación o Agregar a pantalla de inicio.";
+  return false;
+}
+
+async function handleAppModeRequest() {
+  appInstallMessage.textContent = "";
+  if (document.fullscreenElement) {
+    await document.exitFullscreen?.();
+    updateAppModeButton();
+    return;
+  }
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    const choice = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    appInstallMessage.textContent = choice.outcome === "accepted"
+      ? "Instalación aceptada. Abre Nexus Defender desde su nuevo icono."
+      : "Instalación cancelada; todavía puedes jugar en pantalla completa.";
+    updateAppModeButton();
+    return;
+  }
+  await requestAppFullscreen(true);
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || !["http:", "https:"].includes(location.protocol)) return;
+  window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js")
+    .catch(() => { appInstallMessage.textContent = "El modo sin conexión no está disponible por ahora."; }));
 }
 
 function updateOrientationGate() {

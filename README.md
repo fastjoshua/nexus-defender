@@ -1,4 +1,10 @@
-# Nexus Defender V2.1
+# Nexus Defender V2.2
+
+## Actualización V2.2 · Aplicación instalable y pantalla completa
+
+Nexus Defender ahora incluye configuración PWA para instalarse desde el navegador en teléfono o computadora. Al abrirlo desde su icono instalado usa orientación horizontal y modo de pantalla completa, sin la barra normal del navegador. El menú también incorpora el botón **Instalar / Pantalla completa**; en navegadores compatibles muestra la instalación y, cuando no está disponible, activa la pantalla completa o explica cómo agregarlo a inicio en iPhone.
+
+Al pulsar **Iniciar misión** desde un teléfono, el juego también solicita pantalla completa aprovechando el gesto del usuario. El nuevo servicio de funcionamiento sin conexión guarda la portada, el juego, la galería y sus recursos; las páginas buscan primero una actualización en internet para no dejar al jugador atrapado en una versión anterior.
 
 ## Actualización V2.1 · Misión horizontal y guía de puntería
 
