@@ -1,4 +1,8 @@
-# Nexus Defender V2.2.1
+# Nexus Defender V2.2.2
+
+## Ajuste V2.2.2 · Menú móvil coherente con computadora
+
+El menú horizontal de teléfono conserva la misma presentación de dificultad que la versión de computadora: Normal, Difícil y Boss Rush aparecen en tres tarjetas paralelas con su explicación visible. También se mantiene el texto introductorio del panel; la escala se adapta al teléfono y el contenido central puede desplazarse sin ocultar **Iniciar misión**.
 
 ## Ajuste V2.2.1 · Juego móvil directo a pantalla completa
 

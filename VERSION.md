@@ -1,4 +1,13 @@
-# Nexus Defender V2.2.1 · Pantalla completa sin botón de instalación
+# Nexus Defender V2.2.2 · Menú móvil igual al de computadora
+
+**Fecha:** 16 de septiembre de 2026.
+
+- Las tres dificultades vuelven a mostrarse en columnas paralelas en teléfonos horizontales.
+- Normal conserva “Experiencia original”; Difícil y Boss Rush muestran sus requisitos completos.
+- El encabezado “Escoge tu estilo de combate y entra al Nexo” permanece visible en móvil.
+- El panel central admite desplazamiento y mantiene siempre accesible el botón **Iniciar misión**.
+
+## Versión anterior: V2.2.1 · Pantalla completa sin botón de instalación
 
 **Fecha:** 16 de septiembre de 2026.
 

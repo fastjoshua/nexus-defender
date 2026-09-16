@@ -91,8 +91,13 @@ const { chromium } = require('playwright');
       gate: getComputedStyle(document.getElementById('orientationGate')).display !== 'none',
       blocked: orientationBlocked,
       fullWidth: Math.abs(document.querySelector('.menu-layout').getBoundingClientRect().width - innerWidth) < 20,
-      fullHeight: Math.abs(document.querySelector('.menu-layout').getBoundingClientRect().height - innerHeight) < 20 }));
-    assert.deepEqual(horizontalMenu, { menu: true, gate: false, blocked: false, fullWidth: true, fullHeight: true });
+      fullHeight: Math.abs(document.querySelector('.menu-layout').getBoundingClientRect().height - innerHeight) < 20,
+      difficultyColumns: getComputedStyle(document.querySelector('.mode-selector')).gridTemplateColumns.split(' ').length,
+      difficultyDetails: [...document.querySelectorAll('.mode-selector small')]
+        .every(item => getComputedStyle(item).display !== 'none' && item.getBoundingClientRect().height > 0),
+      sameHeading: getComputedStyle(document.querySelector('.menu-panel-heading p')).display !== 'none' }));
+    assert.deepEqual(horizontalMenu, { menu: true, gate: false, blocked: false, fullWidth: true,
+      fullHeight: true, difficultyColumns: 3, difficultyDetails: true, sameHeading: true });
     await mobile.screenshot({ path: path.join(output, 'v21-phone-landscape-menu.png') });
     await mobile.locator('#startForm .primary-button').click();
     const horizontal = await mobile.evaluate(() => {

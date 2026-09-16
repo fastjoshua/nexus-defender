@@ -1362,7 +1362,7 @@ footer {
   .menu-links .secondary-button { min-height: 27px; padding: 3px; font-size: .48rem; }
   .menu-panel-heading { margin-bottom: 3px; }
   .menu-panel-heading h3 { margin: 2px 0; font-size: 1.05rem; }
-  .menu-panel-heading p { display: none; }
+  .menu-panel-heading p { display: block; font-size: .52rem; }
   #startForm { max-height: none; overflow: hidden; }
   .menu-fields { flex: 1 1 auto; min-height: 0; max-height: none; gap: 5px; overflow-y: auto; padding-right: 3px; }
   .menu-name-field { gap: 2px; }
@@ -1375,10 +1375,10 @@ footer {
   #startForm .skin-role, .ship-card .ship-state, .ship-unlock { font-size: .43rem; }
   .ship-card .ship-state, .ship-unlock { min-height: 0; padding: 2px; }
   #startForm .skin-description, .ship-purchase-message { margin: 2px 2px 0; min-height: 0; font-size: .49rem; }
-  #startForm .mode-selector { gap: 4px; }
-  #startForm .mode-selector label { padding: 4px; }
+  #startForm .mode-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  #startForm .mode-selector label { align-content: center; min-height: 38px; padding: 4px; }
   #startForm .mode-selector span { font-size: .54rem; }
-  #startForm .mode-selector small { display: none; }
+  #startForm .mode-selector small { display: block; font-size: .43rem; line-height: 1.15; }
   .menu-advanced summary { padding: 5px 8px; font-size: .53rem; }
   .menu-advanced-content { gap: 4px; padding: 0 7px 6px; }
   .menu-actions { margin-top: 4px; padding-top: 4px; }
