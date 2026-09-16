@@ -1,11 +1,11 @@
-const CACHE_NAME = "nexus-defender-v2.2.3";
+const CACHE_NAME = "nexus-defender-v2.2.4";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./designs.html",
   "./manifest.webmanifest",
   "./icons/nexus-defender.svg",
-  "./css/styles.css?v=2.2.3",
+  "./css/styles.css?v=2.2.4",
   "./css/designs.css",
   "./js/audio-system.js?v=1.6",
   "./js/cosmetic-art.js?v=1.8",
@@ -14,7 +14,7 @@ const APP_SHELL = [
   "./js/enemy-previews.js",
   "./js/game-rules.js?v=1.5",
   "./js/player-art.js?v=1.5",
-  "./js/game.js?v=2.2.3",
+  "./js/game.js?v=2.2.4",
   "./js/gallery.js"
 ];
 

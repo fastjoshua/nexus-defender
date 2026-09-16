@@ -1,4 +1,8 @@
-# Nexus Defender V2.2.3
+# Nexus Defender V2.2.4
+
+## Ajuste V2.2.4 · Guía de apuntado en computadora
+
+La misma línea punteada visible de la puntería móvil ahora aparece en computadora al seleccionar el modo manual. Parte de la nave, sigue exactamente la posición del cursor y se extiende hasta el borde de la arena siguiendo la trayectoria real del disparo. No aparece en puntería automática.
 
 ## Ajuste V2.2.3 · Puntería móvil fijada
 

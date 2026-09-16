@@ -2562,7 +2562,7 @@ function draw(time) {
   if (player) CosmeticArt.aura(ctx, cosmeticCatalog.find(item => item.id === selectedAura),
     player.x + player.width / 2, player.y + player.height / 2, combatTime, lowPerformance);
   drawModuleFields();
-  drawMobileAimGuide();
+  drawAimGuide();
   drawDashEchoes();
   if (player) drawPlayer();
   drawModuleSatellites();
@@ -3256,14 +3256,26 @@ function drawDashEchoes() {
   ctx.restore();
 }
 
-/** Guía móvil discreta pero legible: indica la dirección real de los disparos. */
-function drawMobileAimGuide() {
-  if (!player || !isTouchPhone() || !document.body.classList.contains("mobile-session") ||
-      aimMode !== "manual" || !(manualAim.hasDirection || manualAim.stickActive)) return;
+/** Guía manual para teléfono y PC: indica la dirección real de los disparos. */
+function drawAimGuide() {
+  if (!player || aimMode !== "manual") return;
   const startX = player.x + player.width / 2;
   const startY = player.y + player.height / 2;
-  const vectorX = manualAim.vectorX;
-  const vectorY = manualAim.vectorY;
+  let vectorX, vectorY;
+  if (isTouchPhone() && (manualAim.hasDirection || manualAim.stickActive)) {
+    vectorX = manualAim.vectorX;
+    vectorY = manualAim.vectorY;
+  } else if (manualAim.hasPointer) {
+    const dx = manualAim.x - startX;
+    const dy = manualAim.y - startY;
+    const length = Math.hypot(dx, dy);
+    if (length < 0.01) return;
+    vectorX = dx / length;
+    vectorY = dy / length;
+  } else if (manualAim.hasDirection) {
+    vectorX = manualAim.vectorX;
+    vectorY = manualAim.vectorY;
+  } else return;
   if (Math.hypot(vectorX, vectorY) < 0.01) return;
   const horizontalRange = vectorX > 0 ? (GAME_WIDTH - startX) / vectorX
     : vectorX < 0 ? -startX / vectorX : Infinity;

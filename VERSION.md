@@ -1,4 +1,13 @@
-# Nexus Defender V2.2.3 · Puntería móvil fijada
+# Nexus Defender V2.2.4 · Guía de apuntado en computadora
+
+**Fecha:** 16 de septiembre de 2026.
+
+- La guía punteada también se dibuja con mouse cuando la puntería manual está activa.
+- La trayectoria parte de la nave y continúa hasta el límite real de la arena.
+- El cursor y la guía representan el mismo ángulo utilizado por los proyectiles.
+- La puntería automática permanece limpia, sin línea adicional.
+
+## Versión anterior: V2.2.3 · Puntería móvil fijada
 
 **Fecha:** 16 de septiembre de 2026.
 
